@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
     <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.3" />
   </ItemGroup>

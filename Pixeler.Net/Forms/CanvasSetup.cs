@@ -1,5 +1,4 @@
 ﻿using Pixeler.Net.Models;
-using System.ComponentModel;
 
 namespace Pixeler.Net.Forms;
 
@@ -8,14 +7,12 @@ public partial class CanvasSetup : Form
     private delegate void ConfigurationCreatedEventHandler(object sender, CanvasConfiguration config);
     private event ConfigurationCreatedEventHandler ConfigurationCreated;
 
-    private BackgroundWorker backgroundWorker;
     private List<Point> clickPoints = new();
+    private CanvasConfiguration _config;
 
-    private CanvasConfiguration _config = new();
-
-    public static CanvasConfiguration? PromptForNewConfiguration(Form sender)
+    public static CanvasConfiguration? PromptForConfiguration(Form sender, CanvasConfiguration parentConfig)
     {
-        var promptForm = new CanvasSetup();
+        var promptForm = new CanvasSetup(parentConfig);
         CanvasConfiguration? returnedConfig = null;
 
         // Wait for form to return config
@@ -28,39 +25,42 @@ public partial class CanvasSetup : Form
         return returnedConfig;
     }
 
-    public CanvasSetup()
+    public CanvasSetup(CanvasConfiguration parentConfig)
     {
         InitializeComponent();
+        _config = parentConfig;
 
-        backgroundWorker = new()
-        {
-            WorkerSupportsCancellation = true
-        };
-
-        FormClosed += (sender, args) =>
-        {
-            Pixeler.StaticLogMessage("Canceled configuration update.");
-        };
-
-        backgroundWorker.DoWork += BackgroundWorker_DoWork;
-        backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
+        UpdateCoordinateLabels();
     }
 
+    private void UpdateCoordinateLabels()
+    {
+        topLeftLabel.Text = $"X: {_config.CanvasTopLeft.X}, Y: {_config.CanvasTopLeft.Y}";
+        bottomRightLabel.Text = $"X: {_config.CanvasBottomRight.X}, Y: {_config.CanvasBottomRight.Y}";
+    }
+
+    private bool probingPoints = false;
     private void SetTopLeft_Click(object? sender, EventArgs e)
     {
-        if (startButton.Text == "Set")
-        {
-            startButton.Text = "Cancel";
-            clickPoints.Clear();
-            Pixeler.GlobalHooks.MouseClick += HookManager_MouseClick;
-            backgroundWorker.RunWorkerAsync();
-        }
+        if (!probingPoints)
+            StartProbing();
         else
-        {
-            startButton.Text = "Set";
-            backgroundWorker.CancelAsync();
-            Pixeler.GlobalHooks.MouseClick -= HookManager_MouseClick;
-        }
+            StopProbing();
+    }
+
+    private void StartProbing()
+    {
+        startButton.Text = "Cancel";
+        clickPoints.Clear();
+        Pixeler.GlobalHooks.MouseClick += HookManager_MouseClick;
+        probingPoints = true;
+    }
+
+    private void StopProbing()
+    {
+        startButton.Text = "Set";
+        Pixeler.GlobalHooks.MouseClick -= HookManager_MouseClick;
+        probingPoints = false;
     }
 
     private void ConfirmConfig_Click(object? sender, EventArgs? _)
@@ -71,25 +71,27 @@ public partial class CanvasSetup : Form
 
     private void HookManager_MouseClick(object? sender, MouseEventArgs e)
     {
-        if (e.Button == MouseButtons.Left)
+        if (e.Button is MouseButtons.Left)
         {
             clickPoints.Add(new Point(e.X, e.Y));
+
+            // We have the points, stop scanning
+            if (clickPoints.Count is 1)
+            {
+                _config.CanvasTopLeft = clickPoints[0];
+            }
+            else
+            {
+                StopProbing();
+                _config.CanvasBottomRight = clickPoints[1];
+            }
+
+            UpdateCoordinateLabels();
         }
     }
 
-    private void BackgroundWorker_DoWork(object? sender, DoWorkEventArgs e)
+    private void speedMultiplier_ValueChanged(object sender, EventArgs e)
     {
-        var worker = sender as BackgroundWorker;
-
-        while (!worker.CancellationPending)
-        {
-            Thread.Sleep(10);
-        }
-    }
-
-    private void BackgroundWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
-    {
-        startButton.Text = "Set";
-        // Process clickPoints here
+        _config.TimeDelayMultiplier = (float)speedMultiplier.Value;
     }
 }

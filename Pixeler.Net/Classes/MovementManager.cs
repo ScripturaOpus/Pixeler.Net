@@ -66,7 +66,7 @@ internal class MovementManager
 
                 SendClick(canvasPoints[x, y]);
 
-                Task.Delay((int)(10 * _config.TimeDelay)).Wait();
+                Task.Delay((int)(10 * _config.TimeDelayMultiplier)).Wait();
             }
         }
     }

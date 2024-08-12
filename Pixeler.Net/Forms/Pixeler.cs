@@ -77,13 +77,15 @@ public partial class Pixeler : Form
     private void SetupCoordinates_Click(object sender, EventArgs e)
     {
         UpdateOperation("Awaiting new canvas configuration.");
-        var newConfig = CanvasSetup.PromptForNewConfiguration(this);
+        var newConfig = CanvasSetup.PromptForConfiguration(this, canvasConfig);
 
         if (newConfig is null)
         {
             LogMessage("Failed to create config : Returned null");
             return;
         }
+
+        LogMessage("New configuration set.");
 
         canvasConfig = newConfig;
     }
@@ -105,10 +107,6 @@ public partial class Pixeler : Form
 
     private void WorkerTask_PaintPicture(object? sender, DoWorkEventArgs e)
     {
-        canvasConfig.CanvasTopLeft = new(300, 300);
-        canvasConfig.CanvasBottomRight = new(700, 700);
-        canvasConfig.ImagePath = @"C:\Users\evans\Downloads\Picture1.png";
-
         var mm = new MovementManager(canvasConfig);
         mm.StartPaintingImage();
     }
