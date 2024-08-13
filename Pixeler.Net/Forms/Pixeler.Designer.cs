@@ -43,7 +43,7 @@
             SetupCoordinates.Name = "SetupCoordinates";
             SetupCoordinates.Size = new Size(167, 23);
             SetupCoordinates.TabIndex = 0;
-            SetupCoordinates.Text = "Setup Coordinates";
+            SetupCoordinates.Text = "Edit Configuration";
             SetupCoordinates.UseVisualStyleBackColor = true;
             SetupCoordinates.Click += SetupCoordinates_Click;
             // 
@@ -52,6 +52,7 @@
             loggingBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             loggingBox.Location = new Point(0, 137);
             loggingBox.Name = "loggingBox";
+            loggingBox.ReadOnly = true;
             loggingBox.Size = new Size(569, 118);
             loggingBox.TabIndex = 1;
             loggingBox.Text = "";

@@ -14,6 +14,12 @@ internal static class ConfigurationManager
     {
         file ??= ConfigPath;
 
+        if (!File.Exists(file))
+        {
+            Pixeler.StaticLogMessage("No configuration file was found. Proceeding with default values.");
+            return new();
+        }
+
         try
         {
             var config = JsonConvert.DeserializeObject<CanvasConfiguration>(File.ReadAllText(file));

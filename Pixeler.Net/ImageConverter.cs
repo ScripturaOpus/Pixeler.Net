@@ -27,7 +27,7 @@ internal static class ImageConverter
             for (int x = 0; x < resizedImage.Width; x++)
             {
                 var pixel = resizedImage[y, x];
-                var hexColor = $"#{pixel.R:X2}{pixel.G:X2}{pixel.B:X2}";
+                var hexColor = $"{pixel.R:X2}{pixel.G:X2}{pixel.B:X2}";
                 colors[x, y] = hexColor;
             }
         }

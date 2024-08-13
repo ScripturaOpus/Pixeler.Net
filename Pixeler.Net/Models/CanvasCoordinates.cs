@@ -19,7 +19,7 @@ public class CanvasConfiguration
     /// <summary>
     /// The Windows path to the wanted image (Not preloaded for lower memory usage)
     /// </summary>
-    [JsonIgnore]
+    [JsonProperty("last_loaded_image")]
     public string ImagePath { get; set; } = string.Empty;
 
     /// <summary>
@@ -30,4 +30,22 @@ public class CanvasConfiguration
     /// </summary>
     [JsonProperty("time_delay_multiplier")]
     public float TimeDelayMultiplier { get; set; } = .25f;
+
+    /// <summary>
+    /// Stops the image before it's complete
+    /// </summary>
+    [JsonProperty("cancellation_hotkey")]
+    public char CancellationHotkey { get; set; } = 'G';
+
+    /// <summary>
+    /// Kills Pixeler.
+    /// </summary>
+    [JsonProperty("emergency_kill_hotkey")]
+    public char? EmergencyKillHotkey { get; set; } = '\0';
+
+    /// <summary>
+    /// The screen which is where Pixeler will draw (Defaults to the primary screen)
+    /// </summary>
+    [JsonProperty("draw_screen")]
+    public string? DrawScreen { get; set; } = Screen.PrimaryScreen?.DeviceName;
 }

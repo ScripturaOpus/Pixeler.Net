@@ -1,5 +1,6 @@
 ﻿using Pixeler.Net.Models;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using static Vanara.PInvoke.User32;
 
 namespace Pixeler.Net.Classes;
@@ -14,61 +15,83 @@ internal class MovementManager
     }
 
     // Canvas locations
-    Point colorPanelButton;
-    Point hexInputField;
-    Point exitColorPanelButton;
+    CanvasPoint colorPanelButton;
+    CanvasPoint hexInputField;
+    CanvasPoint exitColorPanelButton;
 
-    Point cellSize;
+    CanvasPoint cellSize;
+
+    int timeDelay;
+
+    int screenWidth;
+    int screenHeight;
+
+    bool abortDrawCall;
+
+    public void ExternalCancel()
+        => abortDrawCall = true;
 
     public void StartPaintingImage()
     {
-        if (string.IsNullOrEmpty(_config.ImagePath))
-        {
-            Pixeler.StaticLogMessage($"Failed to locate image \"{_config.ImagePath}\"");
-            Pixeler.StaticUpdateOperation("Waiting for image.");
-            return;
-        }
+        abortDrawCall = false;
 
-        bool exit = false;
-
-        Pixeler.Hotkey.KeyDown += (sender, e)
-            => exit = true;
+        Pixeler.GlobalHooks.KeyDown += HandleKeyInput;
 
         string[,] hexValues = ImageConverter.ImageToHexColors(_config.ImagePath);
-        Point[,] canvasPoints = CreateCanvasGrid(_config.CanvasTopLeft, _config.CanvasBottomRight);
+        CanvasPoint[,] canvasPoints = CreateCanvasGrid(_config.CanvasTopLeft, _config.CanvasBottomRight);
 
-        colorPanelButton = canvasPoints[21, 31];
-        colorPanelButton.Y += 4 * cellSize.Y;
+        colorPanelButton = canvasPoints[31, 22];
+        colorPanelButton.X += (int)(.5 * cellSize.X);
+        colorPanelButton.Y += 3 * cellSize.Y;
 
-        hexInputField = canvasPoints[21, 28]; // Just happens to be on top of the canvas
+        hexInputField = canvasPoints[29, 22]; // Just happens to be on top of the canvas
 
-        exitColorPanelButton = canvasPoints[31, 15];
+        exitColorPanelButton = canvasPoints[15, 31];
         exitColorPanelButton.X += 4 * cellSize.X;
 
-        SetRobloxAsForeground();
+        var display = Screen.AllScreens.First(screen => screen.DeviceName == _config.DrawScreen).Bounds;
+        screenWidth = display.Width;
+        screenHeight = display.Height;
+
+        timeDelay = (int)(10 * _config.TimeDelayMultiplier);
+
+        // SetRobloxAsForeground();
 
         string lastColor = string.Empty;
         for (int x = 0; x < 32; ++x)
         {
             for (int y = 0; y < 32; ++y)
             {
-                if (exit)
+                if (abortDrawCall)
                 {
                     Pixeler.StaticLogMessage("Stop hotkey entered.");
-                    return;
+                    goto Exit;
                 }
 
-                var nextColor = hexValues[x, y];
+                var color = hexValues[x, y];
 
                 // Skip the color change if we're already using the right color
-                if (lastColor != nextColor)
+                bool changeColor = lastColor != color;
+                if (changeColor)
                     ChangeColor(hexValues[x, y]);
 
-                SendClick(canvasPoints[x, y]);
+                SendClick(canvasPoints[x, y], changeColor);
 
-                Task.Delay((int)(10 * _config.TimeDelayMultiplier)).Wait();
+                lastColor = color;
             }
         }
+
+    Exit:
+        Pixeler.GlobalHooks.KeyDown -= HandleKeyInput;
+    }
+
+    private void Wait(int? delay = null)
+        => Task.Delay(delay ?? timeDelay).Wait();
+
+    private void HandleKeyInput(object? sender, KeyEventArgs e)
+    {
+        if (e.KeyValue == _config.CancellationHotkey)
+            abortDrawCall = true;
     }
 
     private void ChangeColor(string hexColor)
@@ -86,7 +109,7 @@ internal class MovementManager
         SendClick(exitColorPanelButton);
     }
 
-    public Point[,] CreateCanvasGrid(Point topLeft, Point bottomRight)
+    public CanvasPoint[,] CreateCanvasGrid(Point topLeft, Point bottomRight)
     {
         int width = bottomRight.X - topLeft.X;
         int height = bottomRight.Y - topLeft.Y;
@@ -94,16 +117,20 @@ internal class MovementManager
         int cellWidth = width / 32;
         int cellHeight = height / 32;
 
-        cellSize = new(cellWidth, cellHeight);
+        cellSize = new(cellWidth, cellHeight); // Retained cellSize
 
-        Point[,] grid = new Point[32, 32];
+        var halfX = cellSize.X / 2;
+        var halfY = cellSize.Y / 2;
+
+        CanvasPoint[,] grid = new CanvasPoint[32, 32];
+
         for (int row = 0; row < 32; row++)
         {
             for (int col = 0; col < 32; col++)
             {
-                int x = topLeft.X + col * cellWidth;
-                int y = topLeft.Y + row * cellHeight;
-                grid[row, col] = new Point(x, y);
+                int x = topLeft.X + col * cellWidth + halfX;
+                int y = topLeft.Y + row * cellHeight + halfY;
+                grid[row, col] = new CanvasPoint(x, y);
             }
         }
 
@@ -121,21 +148,37 @@ internal class MovementManager
         SetForegroundWindow(robloxProcess.Handle);
     }
 
-    private static void SendClick(Point point)
+    private void SendClick(CanvasPoint point, bool skipDelay = false)
     {
+        // if (!SetCursorPos(point.X, point.Y))
+        // {
+        //     Pixeler.StaticLogMessage($"Failed to set cursor position to X: {point.X}, Y: {point.Y}");
+        //     return;
+        // }
+
         Pixeler.StaticUpdateOperation($"Sending mouse down/up");
+
+        int normalizedX = (int)(point.X * 65535.0 / screenWidth);
+        int normalizedY = (int)(point.Y * 65535.0 / screenHeight);
 
         INPUT[] inputs =
         [
+            new() 
+            {
+                type = INPUTTYPE.INPUT_MOUSE,
+                mi = new() 
+                {
+                    dx = normalizedX,
+                    dy = normalizedY,
+                    dwFlags = MOUSEEVENTF.MOUSEEVENTF_MOVE | MOUSEEVENTF.MOUSEEVENTF_ABSOLUTE
+                }
+            },
             new()
             {
                 type = INPUTTYPE.INPUT_MOUSE,
                 mi = new()
                 {
-                    dx = point.X,
-                    dy = point.Y,
-                    dwFlags = MOUSEEVENTF.MOUSEEVENTF_MOVE | MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN,
-                    dwExtraInfo = GetMessageExtraInfo()
+                    dwFlags = MOUSEEVENTF.MOUSEEVENTF_LEFTDOWN,
                 }
             },
             new()
@@ -144,49 +187,71 @@ internal class MovementManager
                 mi = new()
                 {
                     dwFlags = MOUSEEVENTF.MOUSEEVENTF_LEFTUP,
-                    dwExtraInfo = GetMessageExtraInfo()
                 }
             }
         ];
 
-        var result = SendInput((uint)inputs.Length, inputs, 40);
-
-        if (result != 2)
+        foreach (var input in inputs)
         {
-            Pixeler.StaticLogMessage($"Tried left mouseclick. Result: {result}");
+            var result = SendInput(1, [input], Marshal.SizeOf<INPUT>());
+
+            if (result != 2)
+            {
+                Pixeler.StaticLogMessage($"Sent left mouseclick. Successful actions: {result}");
+            }
+
+            if (!skipDelay)
+                Wait(timeDelay / 2);
         }
     }
 
-    private static void TypeHexColor(string hexColor)
+    private void TypeHexColor(string hexColor)
     {
-        INPUT[] inputs = new INPUT[2];
+        INPUT[] inputs = new INPUT[12];
 
-        foreach (char c in hexColor)
+        int colorIndex = 0;
+        for (int i = 0; i < inputs.Length; i += 2)
         {
-            Pixeler.StaticUpdateOperation($"Sending keycode `{c}` ({c:x00})");
+            char c = hexColor[colorIndex++];
 
             var keyCode = char.ToUpper(c);
 
-            inputs[0].type = INPUTTYPE.INPUT_KEYBOARD;
-            inputs[0].ki = new()
+            inputs[i].type = INPUTTYPE.INPUT_KEYBOARD;
+            inputs[i].ki = new()
             {
                 wVk = keyCode,
             };
 
-            inputs[1].type = INPUTTYPE.INPUT_KEYBOARD;
-            inputs[1].ki = new()
+            inputs[i + 1].type = INPUTTYPE.INPUT_KEYBOARD;
+            inputs[i + 1].ki = new()
             {
                 wVk = keyCode,
                 dwFlags = KEYEVENTF.KEYEVENTF_KEYUP
             };
-
-            var result = SendInput((uint)inputs.Length, inputs, 24);
-
-            if (result != 2)
-            {
-                Pixeler.StaticLogMessage($"Tried keycode `{c}` ({c:x00}). Result: {result}");
-            }
         }
+
+        var result = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
+        Pixeler.StaticLogMessage($"Tried hex color `{hexColor}`. Successful actions: {result}");
+
+        Wait();
+    }
+
+    internal sealed class CanvasPoint
+    {
+        public CanvasPoint(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public CanvasPoint(Point point)
+        {
+            X = point.X;
+            Y = point.Y;
+        }
+
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }
 

@@ -38,6 +38,9 @@
             label5 = new Label();
             bottomRightLabel = new Label();
             topLeftLabel = new Label();
+            label6 = new Label();
+            screenSelection = new ComboBox();
+            visualizeBounds = new Button();
             ((System.ComponentModel.ISupportInitialize)speedMultiplier).BeginInit();
             SuspendLayout();
             // 
@@ -73,7 +76,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 161);
+            label4.Location = new Point(12, 213);
             label4.Name = "label4";
             label4.Size = new Size(93, 15);
             label4.TabIndex = 6;
@@ -82,17 +85,17 @@
             // speedMultiplier
             // 
             speedMultiplier.DecimalPlaces = 1;
-            speedMultiplier.Location = new Point(142, 159);
+            speedMultiplier.Location = new Point(142, 211);
             speedMultiplier.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             speedMultiplier.Name = "speedMultiplier";
             speedMultiplier.Size = new Size(75, 23);
             speedMultiplier.TabIndex = 8;
             speedMultiplier.Value = new decimal(new int[] { 1, 0, 0, 131072 });
-            speedMultiplier.ValueChanged += speedMultiplier_ValueChanged;
+            speedMultiplier.ValueChanged += SpeedMultiplier_ValueChanged;
             // 
             // confirmConfig
             // 
-            confirmConfig.Location = new Point(15, 195);
+            confirmConfig.Location = new Point(15, 247);
             confirmConfig.Name = "confirmConfig";
             confirmConfig.Size = new Size(202, 23);
             confirmConfig.TabIndex = 9;
@@ -136,11 +139,44 @@
             topLeftLabel.TabIndex = 12;
             topLeftLabel.Text = "%PLACEHOLDER%";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(12, 179);
+            label6.Name = "label6";
+            label6.Size = new Size(42, 15);
+            label6.TabIndex = 14;
+            label6.Text = "Screen";
+            // 
+            // screenSelection
+            // 
+            screenSelection.DropDownStyle = ComboBoxStyle.DropDownList;
+            screenSelection.FormattingEnabled = true;
+            screenSelection.Location = new Point(84, 176);
+            screenSelection.Name = "screenSelection";
+            screenSelection.Size = new Size(133, 23);
+            screenSelection.Sorted = true;
+            screenSelection.TabIndex = 15;
+            screenSelection.SelectedIndexChanged += ScreenSelection_SelectedIndexChanged;
+            // 
+            // visualizeBounds
+            // 
+            visualizeBounds.Location = new Point(12, 138);
+            visualizeBounds.Name = "visualizeBounds";
+            visualizeBounds.Size = new Size(202, 23);
+            visualizeBounds.TabIndex = 16;
+            visualizeBounds.Text = "Visualize Bounds";
+            visualizeBounds.UseVisualStyleBackColor = true;
+            visualizeBounds.Click += VisualizeBounds_Click;
+            // 
             // CanvasSetup
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(234, 246);
+            ClientSize = new Size(294, 286);
+            Controls.Add(visualizeBounds);
+            Controls.Add(screenSelection);
+            Controls.Add(label6);
             Controls.Add(bottomRightLabel);
             Controls.Add(topLeftLabel);
             Controls.Add(label5);
@@ -151,7 +187,7 @@
             Controls.Add(label2);
             Controls.Add(startButton);
             Controls.Add(label1);
-            MinimumSize = new Size(250, 285);
+            MinimumSize = new Size(310, 325);
             Name = "CanvasSetup";
             Text = "Canvas Setup";
             ((System.ComponentModel.ISupportInitialize)speedMultiplier).EndInit();
@@ -171,5 +207,8 @@
         private Label label5;
         private Label bottomRightLabel;
         private Label topLeftLabel;
+        private Label label6;
+        private ComboBox screenSelection;
+        private Button visualizeBounds;
     }
 }
