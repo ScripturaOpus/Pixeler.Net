@@ -35,6 +35,7 @@
             currentImageFilePath = new Label();
             loadImageButton = new Button();
             openFileDialog = new OpenFileDialog();
+            ClearLogsButton = new Button();
             SuspendLayout();
             // 
             // SetupCoordinates
@@ -80,7 +81,7 @@
             // currentImageFilePath
             // 
             currentImageFilePath.AutoSize = true;
-            currentImageFilePath.Location = new Point(12, 52);
+            currentImageFilePath.Location = new Point(93, 52);
             currentImageFilePath.Name = "currentImageFilePath";
             currentImageFilePath.Size = new Size(59, 15);
             currentImageFilePath.TabIndex = 4;
@@ -88,7 +89,7 @@
             // 
             // loadImageButton
             // 
-            loadImageButton.Location = new Point(104, 48);
+            loadImageButton.Location = new Point(12, 48);
             loadImageButton.Name = "loadImageButton";
             loadImageButton.Size = new Size(75, 23);
             loadImageButton.TabIndex = 5;
@@ -96,12 +97,23 @@
             loadImageButton.UseVisualStyleBackColor = true;
             loadImageButton.Click += LoadImageButton_Click;
             // 
+            // ClearLogsButton
+            // 
+            ClearLogsButton.Location = new Point(12, 111);
+            ClearLogsButton.Name = "ClearLogsButton";
+            ClearLogsButton.Size = new Size(167, 23);
+            ClearLogsButton.TabIndex = 6;
+            ClearLogsButton.Text = "Clear Logs";
+            ClearLogsButton.UseVisualStyleBackColor = true;
+            ClearLogsButton.Click += ClearLogsButton_Click;
+            // 
             // Pixeler
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(569, 271);
+            Controls.Add(ClearLogsButton);
             Controls.Add(loadImageButton);
             Controls.Add(currentImageFilePath);
             Controls.Add(currentOperation);
@@ -124,5 +136,6 @@
         private Label currentImageFilePath;
         private Button loadImageButton;
         private OpenFileDialog openFileDialog;
+        private Button ClearLogsButton;
     }
 }

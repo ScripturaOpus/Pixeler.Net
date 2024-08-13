@@ -186,4 +186,9 @@ public partial class Pixeler : Form
             }
         }
     }
+
+    private void ClearLogsButton_Click(object sender, EventArgs e)
+    {
+        loggingBox.Text = string.Empty;
+    }
 }

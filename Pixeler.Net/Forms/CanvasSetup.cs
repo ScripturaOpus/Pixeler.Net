@@ -1,4 +1,5 @@
-﻿using Pixeler.Net.Models;
+﻿using Pixeler.Net.Classes;
+using Pixeler.Net.Models;
 using System.ComponentModel;
 
 namespace Pixeler.Net.Forms;
@@ -10,6 +11,13 @@ public partial class CanvasSetup : Form
 
     private readonly List<Point> clickPoints = [];
     private readonly CanvasConfiguration _config;
+
+    private bool probingPoints = false;
+
+    private BoundsVisualizer? boundsVisualizer = null;
+
+    bool movingTopLeft = true,
+        movingBottomRight = false;
 
     public static CanvasConfiguration? PromptForConfiguration(Form sender, CanvasConfiguration parentConfig)
     {
@@ -34,26 +42,30 @@ public partial class CanvasSetup : Form
         UpdateCoordinateLabels();
         speedMultiplier.Value = (decimal)_config.TimeDelayMultiplier;
 
-        var allScreens = Screen.AllScreens;
-        var usedScreen = !allScreens.Any(screen => screen.DeviceName == _config.DrawScreen)
-            ? allScreens.First(screen => screen.Primary).DeviceName
-            : _config.DrawScreen!;
+        // Not going to bother with screen stuff right now
+        screenSelection.Enabled = false;
 
-        if (allScreens.Length is 1)
-        {
-            // The user has no option but their primary display
-            // No point prompting for an alternative
+        //var allScreens = Screen.AllScreens;
+        //var usedScreen = !allScreens.Any(screen => screen.DeviceName == _config.DrawScreen)
+        //    ? allScreens.First(screen => screen.Primary).DeviceName
+        //    : _config.DrawScreen!;
+        //
+        //if (allScreens.Length is 1)
+        //{
+        //    // The user has no option but their primary display
+        //    // No point prompting for an alternative
+        //
+        //    screenSelection.Enabled = false;
+        //    screenSelection.Items.Add(usedScreen);
+        //    screenSelection.Text = usedScreen;
+        //}
+        //else
+        //{
+        //    screenSelection.Items.AddRange(allScreens.Select(screen => screen.DeviceName).ToArray());
+        //    screenSelection.Text = usedScreen;
+        //}
 
-            screenSelection.Enabled = false;
-            screenSelection.Items.Add(usedScreen);
-            screenSelection.Text = usedScreen;
-        }
-        else
-        {
-            screenSelection.Items.AddRange(allScreens.Select(screen => screen.DeviceName).ToArray());
-            screenSelection.Text = usedScreen;
-        }
-
+        paintMethodSelection.DataSource = Enum.GetValues(typeof(PaintingMethod));
     }
 
     protected override void OnClosing(CancelEventArgs e)
@@ -68,7 +80,6 @@ public partial class CanvasSetup : Form
         bottomRightLabel.Text = $"X: {_config.CanvasBottomRight.X}, Y: {_config.CanvasBottomRight.Y}";
     }
 
-    private bool probingPoints = false;
     private void SetTopLeft_Click(object? sender, EventArgs e)
     {
         if (!probingPoints)
@@ -129,7 +140,11 @@ public partial class CanvasSetup : Form
         _config.DrawScreen = screenSelection.Text;
     }
 
-    private BoundsVisualizer? boundsVisualizer = null;
+    private void PaintMethodSelection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        _config.PaintingMethod = (PaintingMethod)paintMethodSelection.SelectedValue!;
+    }
+
     private void VisualizeBounds_Click(object sender, EventArgs e)
     {
         if (boundsVisualizer is not null)
@@ -137,6 +152,7 @@ public partial class CanvasSetup : Form
             boundsVisualizer.Close();
             boundsVisualizer = null;
             visualizeBounds.Text = "Visualize Bounds";
+            TogglePointMoveButtons(false);
 
             return;
         }
@@ -144,8 +160,88 @@ public partial class CanvasSetup : Form
         boundsVisualizer = new BoundsVisualizer(_config);
         boundsVisualizer.Show();
         visualizeBounds.Text = "Close Visualizer";
+        TogglePointMoveButtons(true);
 
         // Make sure this form doesn't get trapped behind the boundary form
         BringToFront();
+    }
+
+    private void TogglePointMoveButtons(bool toggle)
+    {
+        movePointDownButton.Enabled
+            = movePointLeftButton.Enabled
+            = movePointRightButton.Enabled
+            = movePointUpButton.Enabled
+            = topLeftPoint.Enabled
+            = bothPoints.Enabled
+            = bottomRightPoint.Enabled
+            = stepCount.Enabled = toggle;
+    }
+
+    /*
+     * Editing the bounds visualizer
+     */
+
+    private void MovePointHorizontal(bool left)
+    {
+        int step = (int)(left ? -stepCount.Value : stepCount.Value);
+
+        if (movingTopLeft)
+            _config.CanvasTopLeft = new(_config.CanvasTopLeft.X + step, _config.CanvasTopLeft.Y);
+
+        if (movingBottomRight)
+            _config.CanvasBottomRight = new(_config.CanvasBottomRight.X + step, _config.CanvasBottomRight.Y);
+
+        boundsVisualizer?.UpdatePoints();
+    }
+
+    private void MovePointVertical(bool down)
+    {
+        int step = (int)(down ? stepCount.Value : -stepCount.Value);
+
+        if (movingTopLeft)
+            _config.CanvasTopLeft = new(_config.CanvasTopLeft.X, _config.CanvasTopLeft.Y + step);
+
+        if (movingBottomRight)
+            _config.CanvasBottomRight = new(_config.CanvasBottomRight.X, _config.CanvasBottomRight.Y + step);
+
+        boundsVisualizer?.UpdatePoints();
+    }
+
+    private void MovePointUpButton_Click(object sender, EventArgs e)
+    {
+        MovePointVertical(false);
+    }
+
+    private void MovePointRightButton_Click(object sender, EventArgs e)
+    {
+        MovePointHorizontal(false);
+    }
+
+    private void MovePointLeftButton_Click(object sender, EventArgs e)
+    {
+        MovePointHorizontal(true);
+    }
+
+    private void MovePointDownButton_Click(object sender, EventArgs e)
+    {
+        MovePointVertical(true);
+    }
+
+    private void TopLeftPoint_CheckedChanged(object sender, EventArgs e)
+    {
+        movingBottomRight = false;
+        movingTopLeft = true;
+    }
+
+    private void BothPoints_CheckedChanged(object sender, EventArgs e)
+    {
+        movingBottomRight = movingTopLeft = true;
+    }
+
+    private void BottomRightPoint_CheckedChanged(object sender, EventArgs e)
+    {
+        movingBottomRight = true;
+        movingTopLeft = false;
     }
 }

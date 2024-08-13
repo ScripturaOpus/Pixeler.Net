@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Pixeler.Net.Classes;
 
 namespace Pixeler.Net.Models;
 
@@ -48,4 +49,7 @@ public class CanvasConfiguration
     /// </summary>
     [JsonProperty("draw_screen")]
     public string? DrawScreen { get; set; } = Screen.PrimaryScreen?.DeviceName;
+
+    [JsonProperty("paint_method")]
+    public PaintingMethod PaintingMethod { get; set; } = PaintingMethod.Classic;
 }
