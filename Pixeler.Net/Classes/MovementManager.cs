@@ -12,7 +12,8 @@ internal class MovementManager
 
     public MovementManager(CanvasConfiguration canvasConfig)
     {
-        _config = canvasConfig;
+        // Create a copy of the config
+        _config = new(canvasConfig);
 
         var hexValues = ImageConverter.ImageToHexColors(_config.ImagePath);
         var canvasPoints = CreateCanvasGrid();
@@ -332,11 +333,4 @@ internal class MovementManager
         public Point Point { get; set; }
         public string HexColor { get; set; }
     }
-}
-
-public enum PaintingMethod
-{
-    Classic,
-    ColorByColor,
-    MostToLeastAppearance
 }

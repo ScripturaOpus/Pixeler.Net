@@ -13,6 +13,7 @@ public partial class BoundsVisualizer : Form
 
         InitializeComponent();
 
+        // The reference from CanvasSetup is needed for updates real-time
         config = _config;
         BackColor = Color.Red;
         Opacity = .25;

@@ -5,6 +5,22 @@ namespace Pixeler.Net.Models;
 
 public class CanvasConfiguration
 {
+    public CanvasConfiguration()
+    { }
+
+    public CanvasConfiguration(CanvasConfiguration parentConfig)
+    {
+        CanvasTopLeft = parentConfig.CanvasTopLeft;
+        CanvasBottomRight = parentConfig.CanvasBottomRight;
+        TimeDelayMultiplier = parentConfig.TimeDelayMultiplier;
+        CancellationHotkey = parentConfig.CancellationHotkey;
+        EmergencyKillHotkey = parentConfig.EmergencyKillHotkey;
+        PaintingMethod = parentConfig.PaintingMethod;
+
+        DrawScreen = new string(parentConfig.DrawScreen);
+        ImagePath = new string(parentConfig.ImagePath);
+    }
+
     /// <summary>
     /// The point for the top left corner of the in-game canvas
     /// </summary>

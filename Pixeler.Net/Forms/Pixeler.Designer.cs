@@ -54,6 +54,7 @@
             loggingBox.Location = new Point(0, 137);
             loggingBox.Name = "loggingBox";
             loggingBox.ReadOnly = true;
+            loggingBox.ScrollBars = RichTextBoxScrollBars.Vertical;
             loggingBox.Size = new Size(569, 118);
             loggingBox.TabIndex = 1;
             loggingBox.Text = "";

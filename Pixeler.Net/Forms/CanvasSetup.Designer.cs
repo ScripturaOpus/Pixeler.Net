@@ -52,6 +52,7 @@
             stepCount = new NumericUpDown();
             paintMethodSelection = new ComboBox();
             label7 = new Label();
+            helpLink = new LinkLabel();
             ((System.ComponentModel.ISupportInitialize)speedMultiplier).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stepCount).BeginInit();
@@ -99,7 +100,6 @@
             // 
             speedMultiplier.DecimalPlaces = 1;
             speedMultiplier.Location = new Point(140, 196);
-            speedMultiplier.Minimum = new decimal(new int[] { 1, 0, 0, 131072 });
             speedMultiplier.Name = "speedMultiplier";
             speedMultiplier.Size = new Size(109, 23);
             speedMultiplier.TabIndex = 8;
@@ -305,11 +305,22 @@
             label7.TabIndex = 26;
             label7.Text = "Paint Method";
             // 
+            // helpLink
+            // 
+            helpLink.AutoSize = true;
+            helpLink.Location = new Point(203, 17);
+            helpLink.Name = "helpLink";
+            helpLink.Size = new Size(61, 15);
+            helpLink.TabIndex = 28;
+            helpLink.TabStop = true;
+            helpLink.Text = "Help Page";
+            // 
             // CanvasSetup
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(510, 261);
+            Controls.Add(helpLink);
             Controls.Add(paintMethodSelection);
             Controls.Add(label7);
             Controls.Add(movePointRightButton);
@@ -367,5 +378,6 @@
         private NumericUpDown stepCount;
         private ComboBox paintMethodSelection;
         private Label label7;
+        private LinkLabel helpLink;
     }
 }

@@ -151,8 +151,12 @@ public partial class Pixeler : Form
         var sw = Stopwatch.StartNew();
         var paintWorker = new BackgroundWorker();
         paintWorker.DoWork += WorkerTask_PaintPicture;
-        paintWorker.RunWorkerCompleted += (sender, e)
-            => StaticLogMessage($"-------------\nPainting complete. Took {sw.ElapsedMilliseconds:n0}ms");
+
+        paintWorker.RunWorkerCompleted += (sender, e) =>
+        {
+            StaticLogMessage($"-------------\nPainting {((bool)e.Result! ? "complete" : "failed")}. Took {sw.ElapsedMilliseconds:n0}ms");
+        };
+
         paintWorker.RunWorkerAsync();
 
         startPaintDebounce = false;
@@ -161,8 +165,18 @@ public partial class Pixeler : Form
 
     private void WorkerTask_PaintPicture(object? sender, DoWorkEventArgs e)
     {
-        painter = new MovementManager(canvasConfig);
-        painter.StartPaintingImage();
+        try
+        {
+            painter = new MovementManager(canvasConfig);
+            painter.StartPaintingImage();
+
+            e.Result = true;
+        }
+        catch (Exception ex)
+        {
+            StaticLogMessage($"Failed to paint image.\n{ex.GetType().Name}: {ex.Message}");
+            e.Result = false;
+        }
     }
 
     /// <summary>

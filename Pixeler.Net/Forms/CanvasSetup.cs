@@ -21,7 +21,7 @@ public partial class CanvasSetup : Form
 
     public static CanvasConfiguration? PromptForConfiguration(Form sender, CanvasConfiguration parentConfig)
     {
-        var promptForm = new CanvasSetup(parentConfig);
+        var promptForm = new CanvasSetup(new (parentConfig));
         CanvasConfiguration? returnedConfig = null;
 
         // Wait for form to return config
