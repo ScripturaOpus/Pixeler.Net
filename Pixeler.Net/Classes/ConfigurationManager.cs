@@ -16,7 +16,7 @@ internal static class ConfigurationManager
 
         if (!File.Exists(file))
         {
-            Pixeler.StaticLogMessage("No configuration file was found. Proceeding with default values.");
+            PixelerForm.StaticLogMessage("No configuration file was found. Proceeding with default values.");
             return new();
         }
 
@@ -26,7 +26,7 @@ internal static class ConfigurationManager
 
             if (config is null)
             {
-                Pixeler.StaticLogMessage("Configuration was null when loading from file. Reconfiguration is needed.");
+                PixelerForm.StaticLogMessage("Configuration was null when loading from file. Reconfiguration is needed.");
                 return new();
             }
 
@@ -34,7 +34,7 @@ internal static class ConfigurationManager
         }
         catch (Exception e)
         {
-            Pixeler.StaticLogMessage($"Failed to load settings.\n{e.GetType().Name}: {e.Message}\n{e.StackTrace}\nReconfiguration required.");
+            PixelerForm.StaticLogMessage($"Failed to load settings.\n{e.GetType().Name}: {e.Message}\n{e.StackTrace}\nReconfiguration required.");
             return new();
         }
     }
@@ -49,7 +49,7 @@ internal static class ConfigurationManager
 
             if (string.IsNullOrWhiteSpace(serialized) || serialized is "{}")
             {
-                Pixeler.StaticLogMessage("Failed to serialize configuration to Json : Aborting file save to preserve previous configurations.");
+                PixelerForm.StaticLogMessage("Failed to serialize configuration to Json : Aborting file save to preserve previous configurations.");
                 return;
             }
 
@@ -57,7 +57,7 @@ internal static class ConfigurationManager
         }
         catch (Exception e)
         {
-            Pixeler.StaticLogMessage($"Failed to save settings.\n{e.GetType().Name}: {e.Message}\n{e.StackTrace}");
+            PixelerForm.StaticLogMessage($"Failed to save settings.\n{e.GetType().Name}: {e.Message}\n{e.StackTrace}");
         }
     }
 }

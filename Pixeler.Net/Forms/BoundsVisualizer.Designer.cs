@@ -37,7 +37,7 @@
             ClientSize = new Size(800, 450);
             FormBorderStyle = FormBorderStyle.None;
             Name = "BoundsVisualizer";
-            Text = "BoundsVisualizer";
+            Text = "Bounds Visualizer";
             ResumeLayout(false);
         }
 

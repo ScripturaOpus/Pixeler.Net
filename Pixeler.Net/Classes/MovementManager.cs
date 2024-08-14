@@ -15,22 +15,6 @@ internal class MovementManager
         // Create a copy of the config
         _config = new(canvasConfig);
 
-        var hexValues = ImageConverter.ImageToHexColors(_config.ImagePath);
-        var canvasPoints = CreateCanvasGrid();
-
-        for (int x = 0; x < 32; ++x)
-            for (int y = 0; y < 32; ++y)
-                coordinatePairs[x, y] = new(canvasPoints[x,y], hexValues[x,y]);
-
-        colorPanelButton = canvasPoints[31, 22];
-        colorPanelButton.X += (int)(.5 * cellSize.X);
-        colorPanelButton.Y += 3 * cellSize.Y;
-
-        hexInputField = canvasPoints[29, 22]; // Just happens to be on top of the canvas
-
-        exitColorPanelButton = canvasPoints[15, 31];
-        exitColorPanelButton.X += 4 * cellSize.X;
-
         var display = Screen.AllScreens.First(screen => screen.DeviceName == _config.DrawScreen).Bounds;
         screenWidth = display.Width;
         screenHeight = display.Height;
@@ -57,9 +41,25 @@ internal class MovementManager
 
     public void StartPaintingImage()
     {
+        var hexValues = ImageConverter.ImageToHexColors(_config.ImagePath);
+        var canvasPoints = CreateCanvasGrid();
+
+        for (int x = 0; x < 32; ++x)
+            for (int y = 0; y < 32; ++y)
+                coordinatePairs[x, y] = new(canvasPoints[x, y], hexValues[x, y]);
+
+        colorPanelButton = canvasPoints[31, 22];
+        colorPanelButton.X += (int)(.5 * cellSize.X);
+        colorPanelButton.Y += 3 * cellSize.Y;
+
+        hexInputField = canvasPoints[29, 22]; // Just happens to be on top of the canvas
+
+        exitColorPanelButton = canvasPoints[15, 31];
+        exitColorPanelButton.X += 4 * cellSize.X;
+
         abortDrawCall = false;
 
-        Pixeler.GlobalHooks.KeyDown += HandleKeyInput;
+        PixelerForm.GlobalHooks.KeyDown += HandleKeyInput;
 
         var pointPairs = coordinatePairs;
 
@@ -89,7 +89,7 @@ internal class MovementManager
             {
                 if (abortDrawCall)
                 {
-                    Pixeler.StaticLogMessage("Stop hotkey entered.");
+                    PixelerForm.StaticLogMessage("Stop hotkey entered.");
                     goto Exit;
                 }
 
@@ -111,7 +111,7 @@ internal class MovementManager
         }
 
     Exit:
-        Pixeler.GlobalHooks.KeyDown -= HandleKeyInput;
+        PixelerForm.GlobalHooks.KeyDown -= HandleKeyInput;
     }
 
     private void Wait(int? delay = null)
@@ -142,7 +142,7 @@ internal class MovementManager
 
     private void SendClick(Point point, bool skipDelay = false)
     {
-        Pixeler.StaticUpdateOperation($"Sending mouse down/up");
+        PixelerForm.StaticUpdateOperation($"Sending mouse down/up");
 
         int normalizedX = (int)(point.X * 65535.0 / screenWidth);
         int normalizedY = (int)(point.Y * 65535.0 / screenHeight);
@@ -194,7 +194,7 @@ internal class MovementManager
 
             if (result != 2)
             {
-                Pixeler.StaticLogMessage($"Sent left mouseclick. Successful actions: {result}");
+                PixelerForm.StaticLogMessage($"Sent left mouseclick. Successful actions: {result}");
             }
 
             if (!skipDelay)
@@ -230,7 +230,7 @@ internal class MovementManager
         }
 
         var result = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
-        Pixeler.StaticLogMessage($"Tried hex color `{hexColor}`. Successful actions: {result}");
+        PixelerForm.StaticLogMessage($"Tried hex color `{hexColor}`. Successful actions: {result}");
     }
 
     internal Point[,] CreateCanvasGrid()
@@ -244,7 +244,7 @@ internal class MovementManager
         int cellWidth = width / 32;
         int cellHeight = height / 32;
 
-        cellSize = new(cellWidth, cellHeight); // Retained cellSize
+        cellSize = new(cellWidth, cellHeight);
 
         var halfX = cellSize.X / 2;
         var halfY = cellSize.Y / 2;

@@ -1,5 +1,6 @@
 using Gma.System.MouseKeyHook;
 using Pixeler.Net.Classes;
+using Pixeler.Net.Controls;
 using Pixeler.Net.Forms;
 using Pixeler.Net.Models;
 using System.ComponentModel;
@@ -8,16 +9,16 @@ using System.Security;
 
 namespace Pixeler.Net;
 
-public partial class Pixeler : Form
+public partial class PixelerForm : Form
 {
-    public static Pixeler Instance { get; private set; }
+    public static PixelerForm Instance { get; private set; }
 
     internal static readonly IKeyboardMouseEvents GlobalHooks = Hook.GlobalEvents();
 
     private CanvasConfiguration canvasConfig;
     private MovementManager painter;
 
-    public Pixeler()
+    public PixelerForm()
     {
         Instance = this;
         InitializeComponent();
@@ -30,6 +31,9 @@ public partial class Pixeler : Form
 
             Debug.WriteLine("Button entered: " + e.KeyValue);
         };
+
+        DragDrop += HandleFileDrop;
+        DragEnter += HandleFileEnter;
     }
 
     protected override void OnLoad(EventArgs e)
@@ -190,8 +194,7 @@ public partial class Pixeler : Form
         {
             try
             {
-                canvasConfig.ImagePath = openFileDialog.FileName;
-                currentImageFilePath.Text = Path.GetFileName(canvasConfig.ImagePath);
+                UpdateImageString(openFileDialog.FileName);
                 canvasConfig.SaveConfigToFile();
             }
             catch (SecurityException ex)
@@ -201,8 +204,42 @@ public partial class Pixeler : Form
         }
     }
 
+    private void HandleFileEnter(object? sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            e.Effect = DragDropEffects.Copy;
+            return;
+        }
+
+        e.Effect = DragDropEffects.None;
+    }
+
+    private void HandleFileDrop(object? sender, DragEventArgs e)
+    {
+        var file = (string[])e.Data.GetData(DataFormats.FileDrop);
+        UpdateImageString(file[0]);
+    }
+
     private void ClearLogsButton_Click(object sender, EventArgs e)
     {
         loggingBox.Text = string.Empty;
+    }
+
+    private void UpdateImageString(string imagePath)
+    {
+        canvasConfig.ImagePath = imagePath;
+        currentImageFilePath.Text = Path.GetFileName(imagePath);
+        canvasConfig.SaveConfigToFile();
+    }
+
+    private void closeButton_Click(object sender, EventArgs e)
+    {
+        Close();
+    }
+
+    private void minimizeButton_Click(object sender, EventArgs e)
+    {
+        WindowState = FormWindowState.Minimized;
     }
 }

@@ -29,25 +29,25 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            startButton = new Button();
+            startButton = new Controls.CurvedButton();
             label2 = new Label();
             label4 = new Label();
             speedMultiplier = new NumericUpDown();
-            confirmConfig = new Button();
+            confirmConfig = new Controls.CurvedButton();
             label3 = new Label();
             label5 = new Label();
             bottomRightLabel = new Label();
             topLeftLabel = new Label();
             label6 = new Label();
             screenSelection = new ComboBox();
-            visualizeBounds = new Button();
-            movePointDownButton = new Button();
-            movePointUpButton = new Button();
-            movePointLeftButton = new Button();
-            movePointRightButton = new Button();
-            topLeftPoint = new RadioButton();
-            bottomRightPoint = new RadioButton();
-            bothPoints = new RadioButton();
+            visualizeBounds = new Controls.CurvedButton();
+            movePointDownButton = new Controls.CurvedButton();
+            movePointUpButton = new Controls.CurvedButton();
+            movePointLeftButton = new Controls.CurvedButton();
+            movePointRightButton = new Controls.CurvedButton();
+            topLeftPoint = new Pixeler.Net.Controls.NewRadioButton();
+            bottomRightPoint = new Pixeler.Net.Controls.NewRadioButton();
+            bothPoints = new Pixeler.Net.Controls.NewRadioButton();
             panel1 = new Panel();
             stepCount = new NumericUpDown();
             paintMethodSelection = new ComboBox();
@@ -70,11 +70,19 @@
             // 
             // startButton
             // 
+            startButton.BackColor = Color.SteelBlue;
+            startButton.BackgroundColor = Color.SteelBlue;
+            startButton.BorderColor = Color.PaleVioletRed;
+            startButton.BorderRadius = 10;
+            startButton.BorderSize = 0;
+            startButton.FlatStyle = FlatStyle.Flat;
+            startButton.ForeColor = Color.White;
             startButton.Location = new Point(140, 50);
             startButton.Name = "startButton";
             startButton.Size = new Size(109, 23);
             startButton.TabIndex = 1;
             startButton.Text = "Set";
+            startButton.TextColor = Color.White;
             startButton.UseVisualStyleBackColor = true;
             startButton.Click += SetTopLeft_Click;
             // 
@@ -108,11 +116,19 @@
             // 
             // confirmConfig
             // 
-            confirmConfig.Location = new Point(15, 232);
+            confirmConfig.BackColor = Color.SteelBlue;
+            confirmConfig.BackgroundColor = Color.SteelBlue;
+            confirmConfig.BorderColor = Color.PaleVioletRed;
+            confirmConfig.BorderRadius = 10;
+            confirmConfig.BorderSize = 0;
+            confirmConfig.FlatStyle = FlatStyle.Flat;
+            confirmConfig.ForeColor = Color.White;
+            confirmConfig.Location = new Point(15, 230);
             confirmConfig.Name = "confirmConfig";
-            confirmConfig.Size = new Size(234, 21);
+            confirmConfig.Size = new Size(235, 25);
             confirmConfig.TabIndex = 9;
             confirmConfig.Text = "Confirm Configuration";
+            confirmConfig.TextColor = Color.White;
             confirmConfig.UseVisualStyleBackColor = true;
             confirmConfig.Click += ConfirmConfig_Click;
             // 
@@ -174,55 +190,95 @@
             // 
             // visualizeBounds
             // 
+            visualizeBounds.BackColor = Color.SteelBlue;
+            visualizeBounds.BackgroundColor = Color.SteelBlue;
+            visualizeBounds.BorderColor = Color.PaleVioletRed;
+            visualizeBounds.BorderRadius = 10;
+            visualizeBounds.BorderSize = 0;
+            visualizeBounds.FlatStyle = FlatStyle.Flat;
+            visualizeBounds.ForeColor = Color.White;
             visualizeBounds.Location = new Point(293, 230);
             visualizeBounds.Name = "visualizeBounds";
-            visualizeBounds.Size = new Size(200, 23);
+            visualizeBounds.Size = new Size(200, 25);
             visualizeBounds.TabIndex = 16;
             visualizeBounds.Text = "Visualize Bounds";
+            visualizeBounds.TextColor = Color.White;
             visualizeBounds.UseVisualStyleBackColor = true;
             visualizeBounds.Click += VisualizeBounds_Click;
             // 
             // movePointDownButton
             // 
+            movePointDownButton.BackColor = Color.SteelBlue;
+            movePointDownButton.BackgroundColor = Color.SteelBlue;
+            movePointDownButton.BorderColor = Color.PaleVioletRed;
+            movePointDownButton.BorderRadius = 10;
+            movePointDownButton.BorderSize = 0;
             movePointDownButton.Enabled = false;
+            movePointDownButton.FlatStyle = FlatStyle.Flat;
+            movePointDownButton.ForeColor = Color.White;
             movePointDownButton.Location = new Point(416, 152);
             movePointDownButton.Name = "movePointDownButton";
             movePointDownButton.Size = new Size(35, 35);
             movePointDownButton.TabIndex = 18;
             movePointDownButton.Text = "🡣";
+            movePointDownButton.TextColor = Color.White;
             movePointDownButton.UseVisualStyleBackColor = true;
             movePointDownButton.Click += MovePointDownButton_Click;
             // 
             // movePointUpButton
             // 
+            movePointUpButton.BackColor = Color.SteelBlue;
+            movePointUpButton.BackgroundColor = Color.SteelBlue;
+            movePointUpButton.BorderColor = Color.PaleVioletRed;
+            movePointUpButton.BorderRadius = 10;
+            movePointUpButton.BorderSize = 0;
             movePointUpButton.Enabled = false;
+            movePointUpButton.FlatStyle = FlatStyle.Flat;
+            movePointUpButton.ForeColor = Color.White;
             movePointUpButton.Location = new Point(416, 62);
             movePointUpButton.Name = "movePointUpButton";
             movePointUpButton.Size = new Size(35, 35);
             movePointUpButton.TabIndex = 19;
             movePointUpButton.Text = "🡡";
+            movePointUpButton.TextColor = Color.White;
             movePointUpButton.UseVisualStyleBackColor = true;
             movePointUpButton.Click += MovePointUpButton_Click;
             // 
             // movePointLeftButton
             // 
+            movePointLeftButton.BackColor = Color.SteelBlue;
+            movePointLeftButton.BackgroundColor = Color.SteelBlue;
+            movePointLeftButton.BorderColor = Color.PaleVioletRed;
+            movePointLeftButton.BorderRadius = 10;
+            movePointLeftButton.BorderSize = 0;
             movePointLeftButton.Enabled = false;
+            movePointLeftButton.FlatStyle = FlatStyle.Flat;
+            movePointLeftButton.ForeColor = Color.White;
             movePointLeftButton.Location = new Point(371, 107);
             movePointLeftButton.Name = "movePointLeftButton";
             movePointLeftButton.Size = new Size(35, 35);
             movePointLeftButton.TabIndex = 20;
             movePointLeftButton.Text = "🡠";
+            movePointLeftButton.TextColor = Color.White;
             movePointLeftButton.UseVisualStyleBackColor = true;
             movePointLeftButton.Click += MovePointLeftButton_Click;
             // 
             // movePointRightButton
             // 
+            movePointRightButton.BackColor = Color.SteelBlue;
+            movePointRightButton.BackgroundColor = Color.SteelBlue;
+            movePointRightButton.BorderColor = Color.PaleVioletRed;
+            movePointRightButton.BorderRadius = 10;
+            movePointRightButton.BorderSize = 0;
             movePointRightButton.Enabled = false;
+            movePointRightButton.FlatStyle = FlatStyle.Flat;
+            movePointRightButton.ForeColor = Color.White;
             movePointRightButton.Location = new Point(461, 107);
             movePointRightButton.Name = "movePointRightButton";
             movePointRightButton.Size = new Size(35, 35);
             movePointRightButton.TabIndex = 21;
             movePointRightButton.Text = "🡢";
+            movePointRightButton.TextColor = Color.White;
             movePointRightButton.UseVisualStyleBackColor = true;
             movePointRightButton.Click += MovePointRightButton_Click;
             // 
@@ -244,7 +300,7 @@
             // 
             bottomRightPoint.AutoSize = true;
             bottomRightPoint.Enabled = false;
-            bottomRightPoint.Location = new Point(6, 104);
+            bottomRightPoint.Location = new Point(6, 101);
             bottomRightPoint.Name = "bottomRightPoint";
             bottomRightPoint.Size = new Size(96, 19);
             bottomRightPoint.TabIndex = 23;
@@ -256,7 +312,7 @@
             // 
             bothPoints.AutoSize = true;
             bothPoints.Enabled = false;
-            bothPoints.Location = new Point(6, 79);
+            bothPoints.Location = new Point(6, 76);
             bothPoints.Name = "bothPoints";
             bothPoints.Size = new Size(50, 19);
             bothPoints.TabIndex = 24;
@@ -308,6 +364,7 @@
             // helpLink
             // 
             helpLink.AutoSize = true;
+            helpLink.LinkColor = Color.FromArgb(128, 255, 255);
             helpLink.Location = new Point(203, 17);
             helpLink.Name = "helpLink";
             helpLink.Size = new Size(61, 15);
@@ -319,7 +376,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(510, 261);
+            BackColor = Color.FromArgb(38, 38, 38);
+            ClientSize = new Size(510, 273);
             Controls.Add(helpLink);
             Controls.Add(paintMethodSelection);
             Controls.Add(label7);
@@ -341,6 +399,7 @@
             Controls.Add(startButton);
             Controls.Add(label1);
             Controls.Add(panel1);
+            ForeColor = SystemColors.ControlLightLight;
             MinimumSize = new Size(280, 300);
             Name = "CanvasSetup";
             Text = "Canvas Setup";
@@ -355,25 +414,25 @@
         #endregion
 
         private Label label1;
-        private Button startButton;
+        private Pixeler.Net.Controls.CurvedButton startButton;
         private Label label2;
         private Label label4;
         private NumericUpDown speedMultiplier;
-        private Button confirmConfig;
+        private Pixeler.Net.Controls.CurvedButton confirmConfig;
         private Label label3;
         private Label label5;
         private Label bottomRightLabel;
         private Label topLeftLabel;
         private Label label6;
         private ComboBox screenSelection;
-        private Button visualizeBounds;
-        private Button movePointDownButton;
-        private Button movePointUpButton;
-        private Button movePointLeftButton;
-        private Button movePointRightButton;
-        private RadioButton topLeftPoint;
-        private RadioButton bottomRightPoint;
-        private RadioButton bothPoints;
+        private Pixeler.Net.Controls.CurvedButton visualizeBounds;
+        private Pixeler.Net.Controls.CurvedButton movePointDownButton;
+        private Pixeler.Net.Controls.CurvedButton movePointUpButton;
+        private Pixeler.Net.Controls.CurvedButton movePointLeftButton;
+        private Pixeler.Net.Controls.CurvedButton movePointRightButton;
+        private Pixeler.Net.Controls.NewRadioButton topLeftPoint;
+        private Pixeler.Net.Controls.NewRadioButton bottomRightPoint;
+        private Pixeler.Net.Controls.NewRadioButton bothPoints;
         private Panel panel1;
         private NumericUpDown stepCount;
         private ComboBox paintMethodSelection;

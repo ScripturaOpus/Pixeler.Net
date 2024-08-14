@@ -1,6 +1,6 @@
 ﻿namespace Pixeler.Net
 {
-    partial class Pixeler
+    partial class PixelerForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,44 +28,63 @@
         /// </summary>
         private void InitializeComponent()
         {
-            SetupCoordinates = new Button();
+            SetupCoordinates = new Controls.CurvedButton();
             loggingBox = new RichTextBox();
-            PaintStart = new Button();
+            PaintStart = new Controls.CurvedButton();
             currentOperation = new Label();
             currentImageFilePath = new Label();
-            loadImageButton = new Button();
+            loadImageButton = new Controls.CurvedButton();
             openFileDialog = new OpenFileDialog();
-            ClearLogsButton = new Button();
+            ClearLogsButton = new Controls.CurvedButton();
             SuspendLayout();
             // 
             // SetupCoordinates
             // 
+            SetupCoordinates.BackColor = Color.SteelBlue;
+            SetupCoordinates.BackgroundColor = Color.SteelBlue;
+            SetupCoordinates.BorderColor = Color.PaleVioletRed;
+            SetupCoordinates.BorderRadius = 10;
+            SetupCoordinates.BorderSize = 0;
+            SetupCoordinates.FlatStyle = FlatStyle.Flat;
+            SetupCoordinates.ForeColor = Color.White;
             SetupCoordinates.Location = new Point(12, 12);
             SetupCoordinates.Name = "SetupCoordinates";
             SetupCoordinates.Size = new Size(167, 23);
             SetupCoordinates.TabIndex = 0;
             SetupCoordinates.Text = "Edit Configuration";
+            SetupCoordinates.TextColor = Color.White;
             SetupCoordinates.UseVisualStyleBackColor = true;
             SetupCoordinates.Click += SetupCoordinates_Click;
             // 
             // loggingBox
             // 
-            loggingBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            loggingBox.Location = new Point(0, 137);
+            loggingBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            loggingBox.BackColor = SystemColors.ControlDark;
+            loggingBox.BorderStyle = BorderStyle.None;
+            loggingBox.Location = new Point(-5, 158);
+            loggingBox.Margin = new Padding(0);
             loggingBox.Name = "loggingBox";
             loggingBox.ReadOnly = true;
             loggingBox.ScrollBars = RichTextBoxScrollBars.Vertical;
-            loggingBox.Size = new Size(569, 118);
+            loggingBox.Size = new Size(575, 97);
             loggingBox.TabIndex = 1;
             loggingBox.Text = "";
             // 
             // PaintStart
             // 
+            PaintStart.BackColor = Color.SteelBlue;
+            PaintStart.BackgroundColor = Color.SteelBlue;
+            PaintStart.BorderColor = Color.PaleVioletRed;
+            PaintStart.BorderRadius = 10;
+            PaintStart.BorderSize = 0;
+            PaintStart.FlatStyle = FlatStyle.Flat;
+            PaintStart.ForeColor = Color.White;
             PaintStart.Location = new Point(12, 82);
             PaintStart.Name = "PaintStart";
             PaintStart.Size = new Size(167, 23);
             PaintStart.TabIndex = 2;
             PaintStart.Text = "Start Painting";
+            PaintStart.TextColor = Color.White;
             PaintStart.UseVisualStyleBackColor = true;
             PaintStart.Click += PaintStart_Click;
             // 
@@ -73,7 +92,7 @@
             // 
             currentOperation.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             currentOperation.AutoSize = true;
-            currentOperation.Location = new Point(0, 255);
+            currentOperation.Location = new Point(1, 255);
             currentOperation.Name = "currentOperation";
             currentOperation.Size = new Size(107, 15);
             currentOperation.TabIndex = 3;
@@ -90,29 +109,46 @@
             // 
             // loadImageButton
             // 
+            loadImageButton.BackColor = Color.SteelBlue;
+            loadImageButton.BackgroundColor = Color.SteelBlue;
+            loadImageButton.BorderColor = Color.PaleVioletRed;
+            loadImageButton.BorderRadius = 10;
+            loadImageButton.BorderSize = 0;
+            loadImageButton.FlatStyle = FlatStyle.Flat;
+            loadImageButton.ForeColor = Color.White;
             loadImageButton.Location = new Point(12, 48);
             loadImageButton.Name = "loadImageButton";
             loadImageButton.Size = new Size(75, 23);
             loadImageButton.TabIndex = 5;
             loadImageButton.Text = "Browse";
+            loadImageButton.TextColor = Color.White;
             loadImageButton.UseVisualStyleBackColor = true;
             loadImageButton.Click += LoadImageButton_Click;
             // 
             // ClearLogsButton
             // 
+            ClearLogsButton.BackColor = Color.SteelBlue;
+            ClearLogsButton.BackgroundColor = Color.SteelBlue;
+            ClearLogsButton.BorderColor = Color.PaleVioletRed;
+            ClearLogsButton.BorderRadius = 10;
+            ClearLogsButton.BorderSize = 0;
+            ClearLogsButton.FlatStyle = FlatStyle.Flat;
+            ClearLogsButton.ForeColor = Color.White;
             ClearLogsButton.Location = new Point(12, 111);
             ClearLogsButton.Name = "ClearLogsButton";
             ClearLogsButton.Size = new Size(167, 23);
             ClearLogsButton.TabIndex = 6;
             ClearLogsButton.Text = "Clear Logs";
+            ClearLogsButton.TextColor = Color.White;
             ClearLogsButton.UseVisualStyleBackColor = true;
             ClearLogsButton.Click += ClearLogsButton_Click;
             // 
-            // Pixeler
+            // PixelerForm
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(38, 38, 38);
             ClientSize = new Size(569, 271);
             Controls.Add(ClearLogsButton);
             Controls.Add(loadImageButton);
@@ -121,8 +157,9 @@
             Controls.Add(PaintStart);
             Controls.Add(loggingBox);
             Controls.Add(SetupCoordinates);
+            ForeColor = Color.White;
             MinimumSize = new Size(380, 310);
-            Name = "Pixeler";
+            Name = "PixelerForm";
             Text = "Pixeler.Net";
             ResumeLayout(false);
             PerformLayout();
@@ -130,13 +167,13 @@
 
         #endregion
 
-        private Button SetupCoordinates;
+        private Pixeler.Net.Controls.CurvedButton SetupCoordinates;
         private RichTextBox loggingBox;
-        private Button PaintStart;
+        private Pixeler.Net.Controls.CurvedButton PaintStart;
         private Label currentOperation;
         private Label currentImageFilePath;
-        private Button loadImageButton;
+        private Pixeler.Net.Controls.CurvedButton loadImageButton;
         private OpenFileDialog openFileDialog;
-        private Button ClearLogsButton;
+        private Pixeler.Net.Controls.CurvedButton ClearLogsButton;
     }
 }

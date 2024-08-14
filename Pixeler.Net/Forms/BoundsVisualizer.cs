@@ -3,11 +3,11 @@ using Pixeler.Net.Models;
 
 namespace Pixeler.Net.Forms;
 
-public partial class BoundsVisualizer : Form
+internal partial class BoundsVisualizer : Form
 {
     private readonly CanvasConfiguration config;
 
-    public BoundsVisualizer(CanvasConfiguration _config)
+    internal BoundsVisualizer(CanvasConfiguration _config)
     {
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
@@ -17,18 +17,27 @@ public partial class BoundsVisualizer : Form
         config = _config;
         BackColor = Color.Red;
         Opacity = .25;
+
+        Load += (sender, e) =>
+        {
+            UpdatePoints();
+        };
+
+        Paint += (sender, e) =>
+        {
+            DrawDots(e.Graphics);
+        };
     }
 
     public void UpdatePoints()
     {
-        // Update the points using the config reference
-
+        // Update the points using the config reference from CanvasSetup
         int width = config.CanvasBottomRight.X - config.CanvasTopLeft.X;
         int height = config.CanvasBottomRight.Y - config.CanvasTopLeft.Y;
 
         Size = new Size(width, height);
         Location = config.CanvasTopLeft;
-        Invalidate();
+        Refresh();
     }
 
     private void DrawDots(Graphics g)
@@ -41,18 +50,5 @@ public partial class BoundsVisualizer : Form
             var formPoint = PointToClient(point);
             g.FillEllipse(brush, formPoint.X - 2, formPoint.Y - 2, 4, 4);
         }
-    }
-
-    protected override void OnPaint(PaintEventArgs e)
-    {
-        DrawDots(e.Graphics);
-        base.OnPaint(e);
-    }
-
-    protected override void OnLoad(EventArgs e)
-    {
-        UpdatePoints();
-
-        base.OnLoad(e);
     }
 }

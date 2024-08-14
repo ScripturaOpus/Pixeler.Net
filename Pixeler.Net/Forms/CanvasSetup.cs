@@ -1,4 +1,5 @@
 ﻿using Pixeler.Net.Classes;
+using Pixeler.Net.Controls;
 using Pixeler.Net.Models;
 using System.ComponentModel;
 
@@ -21,7 +22,7 @@ public partial class CanvasSetup : Form
 
     public static CanvasConfiguration? PromptForConfiguration(Form sender, CanvasConfiguration parentConfig)
     {
-        var promptForm = new CanvasSetup(new (parentConfig));
+        var promptForm = new CanvasSetup(new(parentConfig));
         CanvasConfiguration? returnedConfig = null;
 
         // Wait for form to return config
@@ -92,14 +93,14 @@ public partial class CanvasSetup : Form
     {
         startButton.Text = "Cancel";
         clickPoints.Clear();
-        Pixeler.GlobalHooks.MouseClick += HookManager_MouseClick;
+        PixelerForm.GlobalHooks.MouseClick += HookManager_MouseClick;
         probingPoints = true;
     }
 
     private void StopProbing()
     {
         startButton.Text = "Set";
-        Pixeler.GlobalHooks.MouseClick -= HookManager_MouseClick;
+        PixelerForm.GlobalHooks.MouseClick -= HookManager_MouseClick;
         probingPoints = false;
     }
 
@@ -243,5 +244,15 @@ public partial class CanvasSetup : Form
     {
         movingBottomRight = true;
         movingTopLeft = false;
+    }
+
+    private void closeButton_Click(object sender, EventArgs e)
+    {
+        Close();
+    }
+
+    private void minimizeButton_Click(object sender, EventArgs e)
+    {
+        WindowState = FormWindowState.Minimized;
     }
 }
