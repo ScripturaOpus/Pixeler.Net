@@ -8,7 +8,12 @@
 	<EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<ApplicationIcon>Assets\pixeler.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\pixeler.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />

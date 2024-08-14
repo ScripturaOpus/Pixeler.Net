@@ -1,6 +1,5 @@
 using Gma.System.MouseKeyHook;
 using Pixeler.Net.Classes;
-using Pixeler.Net.Controls;
 using Pixeler.Net.Forms;
 using Pixeler.Net.Models;
 using System.ComponentModel;

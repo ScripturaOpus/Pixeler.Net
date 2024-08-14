@@ -1,3 +1,5 @@
+<img src="./Pixeler.Net/Assets/pixeler.png" width="200" height="200">
+
 # Pixeler.Net
 A port of [Pixeler](https://github.com/RyukASF/Pixeler), originally developed by [Ryuk](https://github.com/RyukASF).
 This implementation uses C# and Windows Forms for a GUI.

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CanvasSetup));
             label1 = new Label();
             startButton = new Controls.CurvedButton();
             label2 = new Label();
@@ -45,9 +46,9 @@
             movePointUpButton = new Controls.CurvedButton();
             movePointLeftButton = new Controls.CurvedButton();
             movePointRightButton = new Controls.CurvedButton();
-            topLeftPoint = new Pixeler.Net.Controls.NewRadioButton();
-            bottomRightPoint = new Pixeler.Net.Controls.NewRadioButton();
-            bothPoints = new Pixeler.Net.Controls.NewRadioButton();
+            topLeftPoint = new Controls.NewRadioButton();
+            bottomRightPoint = new Controls.NewRadioButton();
+            bothPoints = new Controls.NewRadioButton();
             panel1 = new Panel();
             stepCount = new NumericUpDown();
             paintMethodSelection = new ComboBox();
@@ -286,37 +287,49 @@
             // 
             topLeftPoint.AutoSize = true;
             topLeftPoint.Checked = true;
+            topLeftPoint.CheckedColor = Color.SteelBlue;
             topLeftPoint.Enabled = false;
             topLeftPoint.Location = new Point(6, 51);
+            topLeftPoint.MinimumSize = new Size(0, 21);
             topLeftPoint.Name = "topLeftPoint";
-            topLeftPoint.Size = new Size(67, 19);
+            topLeftPoint.Padding = new Padding(10, 0, 0, 0);
+            topLeftPoint.Size = new Size(77, 21);
             topLeftPoint.TabIndex = 22;
             topLeftPoint.TabStop = true;
             topLeftPoint.Text = "Top Left";
+            topLeftPoint.UnCheckedColor = Color.Gray;
             topLeftPoint.UseVisualStyleBackColor = true;
             topLeftPoint.CheckedChanged += TopLeftPoint_CheckedChanged;
             // 
             // bottomRightPoint
             // 
             bottomRightPoint.AutoSize = true;
+            bottomRightPoint.CheckedColor = Color.SteelBlue;
             bottomRightPoint.Enabled = false;
             bottomRightPoint.Location = new Point(6, 101);
+            bottomRightPoint.MinimumSize = new Size(0, 21);
             bottomRightPoint.Name = "bottomRightPoint";
-            bottomRightPoint.Size = new Size(96, 19);
+            bottomRightPoint.Padding = new Padding(10, 0, 0, 0);
+            bottomRightPoint.Size = new Size(106, 21);
             bottomRightPoint.TabIndex = 23;
             bottomRightPoint.Text = "Bottom Right";
+            bottomRightPoint.UnCheckedColor = Color.Gray;
             bottomRightPoint.UseVisualStyleBackColor = true;
             bottomRightPoint.CheckedChanged += BottomRightPoint_CheckedChanged;
             // 
             // bothPoints
             // 
             bothPoints.AutoSize = true;
+            bothPoints.CheckedColor = Color.SteelBlue;
             bothPoints.Enabled = false;
             bothPoints.Location = new Point(6, 76);
+            bothPoints.MinimumSize = new Size(0, 21);
             bothPoints.Name = "bothPoints";
-            bothPoints.Size = new Size(50, 19);
+            bothPoints.Padding = new Padding(10, 0, 0, 0);
+            bothPoints.Size = new Size(60, 21);
             bothPoints.TabIndex = 24;
             bothPoints.Text = "Both";
+            bothPoints.UnCheckedColor = Color.Gray;
             bothPoints.UseVisualStyleBackColor = true;
             bothPoints.CheckedChanged += BothPoints_CheckedChanged;
             // 
@@ -400,6 +413,7 @@
             Controls.Add(label1);
             Controls.Add(panel1);
             ForeColor = SystemColors.ControlLightLight;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(280, 300);
             Name = "CanvasSetup";
             Text = "Canvas Setup";

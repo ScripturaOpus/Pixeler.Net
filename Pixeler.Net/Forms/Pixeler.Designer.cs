@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PixelerForm));
             SetupCoordinates = new Controls.CurvedButton();
             loggingBox = new RichTextBox();
             PaintStart = new Controls.CurvedButton();
@@ -158,6 +159,7 @@
             Controls.Add(loggingBox);
             Controls.Add(SetupCoordinates);
             ForeColor = Color.White;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(380, 310);
             Name = "PixelerForm";
             Text = "Pixeler.Net";
