@@ -11,6 +11,10 @@
 	<ApplicationIcon>Assets\pixeler.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="Assets\pixeler.ico" />
   </ItemGroup>

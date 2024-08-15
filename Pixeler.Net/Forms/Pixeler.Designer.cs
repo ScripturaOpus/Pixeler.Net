@@ -37,6 +37,10 @@
             loadImageButton = new Controls.CurvedButton();
             openFileDialog = new OpenFileDialog();
             ClearLogsButton = new Controls.CurvedButton();
+            openSavedImages = new Controls.CurvedButton();
+            viewImage = new Controls.CurvedButton();
+            appearOnTop = new Controls.ToggleButton();
+            label1 = new Label();
             SuspendLayout();
             // 
             // SetupCoordinates
@@ -50,7 +54,7 @@
             SetupCoordinates.ForeColor = Color.White;
             SetupCoordinates.Location = new Point(12, 12);
             SetupCoordinates.Name = "SetupCoordinates";
-            SetupCoordinates.Size = new Size(167, 23);
+            SetupCoordinates.Size = new Size(167, 25);
             SetupCoordinates.TabIndex = 0;
             SetupCoordinates.Text = "Edit Configuration";
             SetupCoordinates.TextColor = Color.White;
@@ -62,12 +66,12 @@
             loggingBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             loggingBox.BackColor = SystemColors.ControlDark;
             loggingBox.BorderStyle = BorderStyle.None;
-            loggingBox.Location = new Point(-5, 158);
+            loggingBox.Location = new Point(1, 158);
             loggingBox.Margin = new Padding(0);
             loggingBox.Name = "loggingBox";
             loggingBox.ReadOnly = true;
             loggingBox.ScrollBars = RichTextBoxScrollBars.Vertical;
-            loggingBox.Size = new Size(575, 97);
+            loggingBox.Size = new Size(569, 97);
             loggingBox.TabIndex = 1;
             loggingBox.Text = "";
             // 
@@ -82,7 +86,7 @@
             PaintStart.ForeColor = Color.White;
             PaintStart.Location = new Point(12, 82);
             PaintStart.Name = "PaintStart";
-            PaintStart.Size = new Size(167, 23);
+            PaintStart.Size = new Size(167, 25);
             PaintStart.TabIndex = 2;
             PaintStart.Text = "Start Painting";
             PaintStart.TextColor = Color.White;
@@ -119,7 +123,7 @@
             loadImageButton.ForeColor = Color.White;
             loadImageButton.Location = new Point(12, 48);
             loadImageButton.Name = "loadImageButton";
-            loadImageButton.Size = new Size(75, 23);
+            loadImageButton.Size = new Size(75, 25);
             loadImageButton.TabIndex = 5;
             loadImageButton.Text = "Browse";
             loadImageButton.TextColor = Color.White;
@@ -137,12 +141,76 @@
             ClearLogsButton.ForeColor = Color.White;
             ClearLogsButton.Location = new Point(12, 111);
             ClearLogsButton.Name = "ClearLogsButton";
-            ClearLogsButton.Size = new Size(167, 23);
+            ClearLogsButton.Size = new Size(167, 25);
             ClearLogsButton.TabIndex = 6;
             ClearLogsButton.Text = "Clear Logs";
             ClearLogsButton.TextColor = Color.White;
             ClearLogsButton.UseVisualStyleBackColor = true;
             ClearLogsButton.Click += ClearLogsButton_Click;
+            // 
+            // openSavedImages
+            // 
+            openSavedImages.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            openSavedImages.BackColor = Color.SteelBlue;
+            openSavedImages.BackgroundColor = Color.SteelBlue;
+            openSavedImages.BorderColor = Color.PaleVioletRed;
+            openSavedImages.BorderRadius = 10;
+            openSavedImages.BorderSize = 0;
+            openSavedImages.FlatStyle = FlatStyle.Flat;
+            openSavedImages.ForeColor = Color.White;
+            openSavedImages.Location = new Point(390, 80);
+            openSavedImages.Name = "openSavedImages";
+            openSavedImages.Size = new Size(167, 25);
+            openSavedImages.TabIndex = 7;
+            openSavedImages.Text = "Open Downloaded Images";
+            openSavedImages.TextColor = Color.White;
+            openSavedImages.UseVisualStyleBackColor = true;
+            openSavedImages.Click += openSavedImages_Click;
+            // 
+            // viewImage
+            // 
+            viewImage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            viewImage.BackColor = Color.SteelBlue;
+            viewImage.BackgroundColor = Color.SteelBlue;
+            viewImage.BorderColor = Color.PaleVioletRed;
+            viewImage.BorderRadius = 10;
+            viewImage.BorderSize = 0;
+            viewImage.FlatStyle = FlatStyle.Flat;
+            viewImage.ForeColor = Color.White;
+            viewImage.Location = new Point(390, 111);
+            viewImage.Name = "viewImage";
+            viewImage.Size = new Size(167, 25);
+            viewImage.TabIndex = 8;
+            viewImage.Text = "View Image";
+            viewImage.TextColor = Color.White;
+            viewImage.UseVisualStyleBackColor = true;
+            viewImage.Click += viewImage_Click;
+            // 
+            // appearOnTop
+            // 
+            appearOnTop.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            appearOnTop.AutoSize = true;
+            appearOnTop.Location = new Point(512, 12);
+            appearOnTop.MinimumSize = new Size(45, 22);
+            appearOnTop.Name = "appearOnTop";
+            appearOnTop.OffBackColor = Color.Gray;
+            appearOnTop.OffToggleColor = Color.Gainsboro;
+            appearOnTop.OnBackColor = Color.SteelBlue;
+            appearOnTop.OnToggleColor = Color.WhiteSmoke;
+            appearOnTop.Size = new Size(45, 22);
+            appearOnTop.TabIndex = 11;
+            appearOnTop.UseVisualStyleBackColor = true;
+            appearOnTop.CheckedChanged += appearOnTop_CheckedChanged;
+            // 
+            // label1
+            // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.Location = new Point(420, 15);
+            label1.Name = "label1";
+            label1.Size = new Size(86, 15);
+            label1.TabIndex = 12;
+            label1.Text = "Appear On Top";
             // 
             // PixelerForm
             // 
@@ -151,6 +219,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(38, 38, 38);
             ClientSize = new Size(569, 271);
+            Controls.Add(label1);
+            Controls.Add(appearOnTop);
+            Controls.Add(viewImage);
+            Controls.Add(openSavedImages);
             Controls.Add(ClearLogsButton);
             Controls.Add(loadImageButton);
             Controls.Add(currentImageFilePath);
@@ -177,5 +249,9 @@
         private Pixeler.Net.Controls.CurvedButton loadImageButton;
         private OpenFileDialog openFileDialog;
         private Pixeler.Net.Controls.CurvedButton ClearLogsButton;
+        private Controls.CurvedButton openSavedImages;
+        private Controls.CurvedButton viewImage;
+        private Controls.ToggleButton appearOnTop;
+        private Label label1;
     }
 }

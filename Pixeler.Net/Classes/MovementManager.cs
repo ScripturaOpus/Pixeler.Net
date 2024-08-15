@@ -82,6 +82,9 @@ internal class MovementManager
         // First click to make window in focus (Might make something better later)
         SendClick(coordinatePairs[0, 0].Point);
 
+        const float stepIncrement = 100 / 1024f;
+        float progress = stepIncrement;
+
         string lastColor = string.Empty;
         for (int x = 0; x < 32; ++x)
         {
@@ -102,7 +105,10 @@ internal class MovementManager
 
                 // Paint the pixel (Twice to make sure it registers)
                 SendClick(pointPairs[x, y].Point, changeColor);
-                SendClick(pointPairs[x, y].Point, false);
+                // SendClick(pointPairs[x, y].Point, false);
+
+                progress += stepIncrement;
+                PixelerForm.StaticUpdateOperation($"Painting progress: {progress:n0}%/100%");
 
                 Wait();
 
@@ -142,8 +148,6 @@ internal class MovementManager
 
     private void SendClick(Point point, bool skipDelay = false)
     {
-        PixelerForm.StaticUpdateOperation($"Sending mouse down/up");
-
         int normalizedX = (int)(point.X * 65535.0 / screenWidth);
         int normalizedY = (int)(point.Y * 65535.0 / screenHeight);
 
@@ -192,10 +196,8 @@ internal class MovementManager
         {
             var result = SendInput(1, [input], Marshal.SizeOf<INPUT>());
 
-            if (result != 2)
-            {
+            if (result != 1)
                 PixelerForm.StaticLogMessage($"Sent left mouseclick. Successful actions: {result}");
-            }
 
             if (!skipDelay)
                 Wait(1);
