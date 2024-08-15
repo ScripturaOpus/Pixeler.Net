@@ -7,6 +7,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Reflection.Metadata.Ecma335;
 using System.Security;
 using Image = SixLabors.ImageSharp.Image;
 using Point = System.Drawing.Point;
@@ -140,27 +141,8 @@ public partial class PixelerForm : Form
         startPaintDebounce = true;
         PaintStart.Text = "Stop Painting";
 
-        if (canvasConfig.CanvasBottomRight == new Point(0, 0)
-            || canvasConfig.CanvasTopLeft == new Point(0, 0))
-        {
-            LogMessage("Configuration required to start painting.");
-            UpdateOperation("Waiting for coordinate configuration.");
+        if (!PrePaintChecks())
             return;
-        }
-
-        if (string.IsNullOrEmpty(canvasConfig.ImagePath))
-        {
-            LogMessage("An image is required to start painting.");
-            UpdateOperation("Waiting for image.");
-            return;
-        }
-
-        if (!File.Exists(canvasConfig.ImagePath))
-        {
-            LogMessage($"Failed to locate image \"{canvasConfig.ImagePath}\"");
-            UpdateOperation("Waiting for image.");
-            return;
-        }
 
         var sw = Stopwatch.StartNew();
         var paintWorker = new BackgroundWorker();
@@ -177,12 +159,47 @@ public partial class PixelerForm : Form
         PaintStart.Text = "Start Painting";
     }
 
+    private void validateColors_Click(object sender, EventArgs e)
+    {
+        if (startPaintDebounce)
+        {
+            painter?.ExternalCancel();
+            startPaintDebounce = false;
+            validateColors.Text = "Validate Colors";
+            return;
+        }
+
+        startPaintDebounce = true;
+        validateColors.Text = "Stop Validating";
+
+        if (!PrePaintChecks())
+            return;
+
+        var sw = Stopwatch.StartNew();
+        var paintWorker = new BackgroundWorker();
+        paintWorker.DoWork += WorkerTask_PaintPicture;
+
+        paintWorker.RunWorkerCompleted += (sender, e) =>
+        {
+            StaticLogMessage($"-------------\nPainting verification {((bool)e.Result! ? "complete" : "failed")}. Took {sw.ElapsedMilliseconds:n0}ms");
+        };
+
+        paintWorker.RunWorkerAsync(true);
+
+        startPaintDebounce = false;
+        validateColors.Text = "Validate Colors";
+    }
+
     private void WorkerTask_PaintPicture(object? sender, DoWorkEventArgs e)
     {
         try
         {
             painter = new MovementManager(canvasConfig);
-            painter.StartPaintingImage();
+
+            if (e.Argument is not true)
+                painter.StartPaintingImage();
+            else
+                painter.ValidateColors();
 
             e.Result = true;
         }
@@ -191,6 +208,33 @@ public partial class PixelerForm : Form
             StaticLogMessage($"Failed to paint image.\n{ex.GetType().Name}: {ex.Message}");
             e.Result = false;
         }
+    }
+
+    private bool PrePaintChecks()
+    {
+        if (canvasConfig.CanvasBottomRight == new Point(0, 0)
+            || canvasConfig.CanvasTopLeft == new Point(0, 0))
+        {
+            LogMessage("Configuration required to start painting.");
+            UpdateOperation("Waiting for coordinate configuration.");
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(canvasConfig.ImagePath))
+        {
+            LogMessage("An image is required to start painting.");
+            UpdateOperation("Waiting for image.");
+            return false;
+        }
+
+        if (!File.Exists(canvasConfig.ImagePath))
+        {
+            LogMessage($"Failed to locate image \"{canvasConfig.ImagePath}\"");
+            UpdateOperation("Waiting for image.");
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -436,8 +480,8 @@ public partial class PixelerForm : Form
 
     private void appearOnTop_CheckedChanged(object sender, EventArgs e)
     {
-        Vanara.PInvoke.User32.SetWindowPos(Handle, appearOnTop.Checked 
-            ? HWND_TOPMOST 
+        Vanara.PInvoke.User32.SetWindowPos(Handle, appearOnTop.Checked
+            ? HWND_TOPMOST
             : HWND_NOTTOPMOST, Location.X, Location.Y, Size.Width, Size.Height, 0);
     }
 }

@@ -41,6 +41,7 @@
             viewImage = new Controls.CurvedButton();
             appearOnTop = new Controls.ToggleButton();
             label1 = new Label();
+            validateColors = new Controls.CurvedButton();
             SuspendLayout();
             // 
             // SetupCoordinates
@@ -66,12 +67,12 @@
             loggingBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             loggingBox.BackColor = SystemColors.ControlDark;
             loggingBox.BorderStyle = BorderStyle.None;
-            loggingBox.Location = new Point(1, 158);
+            loggingBox.Location = new Point(1, 190);
             loggingBox.Margin = new Padding(0);
             loggingBox.Name = "loggingBox";
             loggingBox.ReadOnly = true;
             loggingBox.ScrollBars = RichTextBoxScrollBars.Vertical;
-            loggingBox.Size = new Size(569, 97);
+            loggingBox.Size = new Size(569, 145);
             loggingBox.TabIndex = 1;
             loggingBox.Text = "";
             // 
@@ -97,7 +98,7 @@
             // 
             currentOperation.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             currentOperation.AutoSize = true;
-            currentOperation.Location = new Point(1, 255);
+            currentOperation.Location = new Point(1, 335);
             currentOperation.Name = "currentOperation";
             currentOperation.Size = new Size(107, 15);
             currentOperation.TabIndex = 3;
@@ -139,7 +140,7 @@
             ClearLogsButton.BorderSize = 0;
             ClearLogsButton.FlatStyle = FlatStyle.Flat;
             ClearLogsButton.ForeColor = Color.White;
-            ClearLogsButton.Location = new Point(12, 111);
+            ClearLogsButton.Location = new Point(12, 113);
             ClearLogsButton.Name = "ClearLogsButton";
             ClearLogsButton.Size = new Size(167, 25);
             ClearLogsButton.TabIndex = 6;
@@ -212,13 +213,32 @@
             label1.TabIndex = 12;
             label1.Text = "Appear On Top";
             // 
+            // validateColors
+            // 
+            validateColors.BackColor = Color.SteelBlue;
+            validateColors.BackgroundColor = Color.SteelBlue;
+            validateColors.BorderColor = Color.PaleVioletRed;
+            validateColors.BorderRadius = 10;
+            validateColors.BorderSize = 0;
+            validateColors.FlatStyle = FlatStyle.Flat;
+            validateColors.ForeColor = Color.White;
+            validateColors.Location = new Point(12, 144);
+            validateColors.Name = "validateColors";
+            validateColors.Size = new Size(167, 25);
+            validateColors.TabIndex = 13;
+            validateColors.Text = "Validate Colors";
+            validateColors.TextColor = Color.White;
+            validateColors.UseVisualStyleBackColor = true;
+            validateColors.Click += validateColors_Click;
+            // 
             // PixelerForm
             // 
             AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(38, 38, 38);
-            ClientSize = new Size(569, 271);
+            ClientSize = new Size(569, 351);
+            Controls.Add(validateColors);
             Controls.Add(label1);
             Controls.Add(appearOnTop);
             Controls.Add(viewImage);
@@ -253,5 +273,6 @@
         private Controls.CurvedButton viewImage;
         private Controls.ToggleButton appearOnTop;
         private Label label1;
+        private Controls.CurvedButton validateColors;
     }
 }

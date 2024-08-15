@@ -1,5 +1,7 @@
 ﻿using Pixeler.Net.Models;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Vanara.PInvoke;
 using static Vanara.PInvoke.User32;
 
 namespace Pixeler.Net.Classes;
@@ -9,6 +11,12 @@ internal class MovementManager
     private readonly CanvasConfiguration _config;
 
     readonly CanvasCoordinatePair[,] coordinatePairs = new CanvasCoordinatePair[32, 32];
+
+    [DllImport("gdi32.dll")] 
+    private static extern uint GetPixel(IntPtr hdc, int nXPos, int nYPos);
+
+    [DllImport("user32.dll")]
+    static extern IntPtr GetDC(IntPtr hWnd);
 
     public MovementManager(CanvasConfiguration canvasConfig)
     {
@@ -41,43 +49,9 @@ internal class MovementManager
 
     public void StartPaintingImage()
     {
-        var hexValues = ImageConverter.ImageToHexColors(_config.ImagePath);
-        var canvasPoints = CreateCanvasGrid();
+        Initialize();
 
-        for (int x = 0; x < 32; ++x)
-            for (int y = 0; y < 32; ++y)
-                coordinatePairs[x, y] = new(canvasPoints[x, y], hexValues[x, y]);
-
-        colorPanelButton = canvasPoints[31, 22];
-        colorPanelButton.X += (int)(.5 * cellSize.X);
-        colorPanelButton.Y += 3 * cellSize.Y;
-
-        hexInputField = canvasPoints[29, 22]; // Just happens to be on top of the canvas
-
-        exitColorPanelButton = canvasPoints[15, 31];
-        exitColorPanelButton.X += 4 * cellSize.X;
-
-        abortDrawCall = false;
-
-        PixelerForm.GlobalHooks.KeyDown += HandleKeyInput;
-
-        var pointPairs = coordinatePairs;
-
-        // Reorganize the points for painting efficiency
-        switch (_config.PaintingMethod)
-        {
-            case PaintingMethod.ColorByColor:
-                pointPairs = SortByHexColor(pointPairs);
-                break;
-
-            case PaintingMethod.MostToLeastAppearance:
-                pointPairs = SortByColorFrequency(pointPairs);
-                break;
-
-            case PaintingMethod.Classic:
-                // Do nothing, it's already sorted for "classic" painting
-                break;
-        }
+        var pointPairs = SortColors(coordinatePairs, _config.PaintingMethod);
 
         // First click to make window in focus (Might make something better later)
         SendClick(coordinatePairs[0, 0].Point);
@@ -118,6 +92,91 @@ internal class MovementManager
 
     Exit:
         PixelerForm.GlobalHooks.KeyDown -= HandleKeyInput;
+    }
+
+    public void ValidateColors()
+    {
+        Initialize();
+
+        var pointPairs = SortColors(coordinatePairs, _config.PaintingMethod);
+
+        const float stepIncrement = 100 / 1024f;
+        float progress = stepIncrement;
+
+        var screenHdc = GetDC(IntPtr.Zero);
+
+        // First click to make window in focus (Might make something better later)
+        SendClick(coordinatePairs[0, 0].Point);
+
+        string lastColor = string.Empty;
+        for (int x = 0; x < 32; ++x)
+        {
+            for (int y = 0; y < 32; ++y)
+            {
+                if (abortDrawCall)
+                {
+                    PixelerForm.StaticLogMessage("Stop hotkey entered.");
+                    goto Exit;
+                }
+
+                var pair = pointPairs[x, y];
+                var point = pair.Point;
+
+                var pixel = GetPixel(screenHdc, point.X, point.Y);
+                var pixelColor = ColorTranslator.FromWin32((int)pixel);
+
+                var hexPixelColor = $"{pixelColor.R:X2}{pixelColor.G:X2}{pixelColor.B:X2}";
+
+                var color = pair.HexColor;
+                Debug.WriteLine($"{hexPixelColor} -> {color}");
+
+                if (color != hexPixelColor)
+                {
+                    PixelerForm.StaticLogMessage($"Redrawing pixel `{hexPixelColor}` -> `{color}`");
+
+                    // Skip the color change if we're already using the right color
+                    bool changeColor = lastColor != color;
+                    if (changeColor)
+                        ChangeColor(color);
+
+                    SendClick(point, false);
+                }
+                   
+                progress += stepIncrement;
+                PixelerForm.StaticUpdateOperation($"Painting progress: {progress:n0}%/100%");
+
+                lastColor = color;
+            }
+        }
+
+    Exit:
+        PixelerForm.GlobalHooks.KeyDown -= HandleKeyInput;
+
+        // First click to make window in focus (Might make something better later)
+        SendClick(coordinatePairs[0, 0].Point);
+    }
+
+    private void Initialize()
+    {
+        var hexValues = ImageConverter.ImageToHexColors(_config.ImagePath);
+        var canvasPoints = CreateCanvasGrid();
+
+        for (int x = 0; x < 32; ++x)
+            for (int y = 0; y < 32; ++y)
+                coordinatePairs[x, y] = new(canvasPoints[x, y], hexValues[x, y]);
+
+        colorPanelButton = canvasPoints[31, 22];
+        colorPanelButton.X += (int)(.5 * cellSize.X);
+        colorPanelButton.Y += 3 * cellSize.Y;
+
+        hexInputField = canvasPoints[29, 22]; // Just happens to be on top of the canvas
+
+        exitColorPanelButton = canvasPoints[15, 31];
+        exitColorPanelButton.X += 4 * cellSize.X;
+
+        abortDrawCall = false;
+
+        PixelerForm.GlobalHooks.KeyDown += HandleKeyInput;
     }
 
     private void Wait(int? delay = null)
@@ -266,7 +325,26 @@ internal class MovementManager
         return grid;
     }
 
-    public static CanvasCoordinatePair[,] SortByHexColor(CanvasCoordinatePair[,] originalArray)
+    private static CanvasCoordinatePair[,] SortColors(CanvasCoordinatePair[,] pointPairs, PaintingMethod method)
+    {
+        // Reorganize the points for painting efficiency
+        switch (method)
+        {
+            case PaintingMethod.ColorByColor:
+                return SortByHexColor(pointPairs);
+
+            case PaintingMethod.MostToLeastAppearance:
+                return SortByColorFrequency(pointPairs);
+
+            case PaintingMethod.Classic:
+                // Do nothing, it's already sorted for "classic" painting
+                break;
+        }
+
+        return pointPairs;
+    }
+
+    private static CanvasCoordinatePair[,] SortByHexColor(CanvasCoordinatePair[,] originalArray)
     {
         // Flatten the array
         var flattenedArray = originalArray.Cast<CanvasCoordinatePair>().ToArray();
