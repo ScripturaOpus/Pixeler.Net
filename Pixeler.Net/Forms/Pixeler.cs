@@ -456,6 +456,7 @@ public partial class PixelerForm : Form
         {
             imagePreview.Close();
             imagePreview = null;
+            viewImage.Text = "View Image";
             return;
         }
 
@@ -471,6 +472,7 @@ public partial class PixelerForm : Form
             return;
         }
 
+        viewImage.Text = "Close Image";
         imagePreview = new(canvasConfig.ImagePath);
         imagePreview.Show();
     }

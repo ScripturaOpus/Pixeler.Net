@@ -1,5 +1,5 @@
-﻿using Pixeler.Net.Classes;
-using Pixeler.Net.Controls;
+﻿using Gma.System.MouseKeyHook;
+using Pixeler.Net.Classes;
 using Pixeler.Net.Models;
 using System.ComponentModel;
 
@@ -79,6 +79,16 @@ public partial class CanvasSetup : Form
     {
         topLeftLabel.Text = $"X: {_config.CanvasTopLeft.X}, Y: {_config.CanvasTopLeft.Y}";
         bottomRightLabel.Text = $"X: {_config.CanvasBottomRight.X}, Y: {_config.CanvasBottomRight.Y}";
+
+        // Overrides
+        if (_config.OpenColorMenu.HasValue)
+            openLocation.Text = $"X: {_config.OpenColorMenu.Value.X} Y: {_config.OpenColorMenu.Value.Y}";
+
+        if (_config.CloseColorMenu.HasValue)
+            closeLocation.Text = $"X: {_config.CloseColorMenu.Value.X} Y: {_config.CloseColorMenu.Value.Y}";
+
+        if (_config.HexColorField.HasValue)
+            hexInputLocation.Text = $"X: {_config.HexColorField.Value.X} Y: {_config.HexColorField.Value.Y}";
     }
 
     private void SetTopLeft_Click(object? sender, EventArgs e)
@@ -104,6 +114,16 @@ public partial class CanvasSetup : Form
         probingPoints = false;
     }
 
+    private void StartGenericProbing(Button button)
+    {
+
+    }
+
+    private void setColorEnter_Click(object sender, EventArgs e)
+    {
+
+    }
+
     private void ConfirmConfig_Click(object? sender, EventArgs? _)
     {
         ConfigurationCreated?.Invoke(this, _config);
@@ -126,6 +146,16 @@ public partial class CanvasSetup : Form
                 StopProbing();
                 _config.CanvasBottomRight = clickPoints[1];
             }
+
+            UpdateCoordinateLabels();
+        }
+    }
+
+    private void HookManagerOverrides_MouseClick(object? sender, MouseEventExtArgs e)
+    {
+        if (e.Button is MouseButtons.Left)
+        {
+            clickPoints.Add(e.Location);
 
             UpdateCoordinateLabels();
         }

@@ -78,8 +78,8 @@ internal class MovementManager
                     ChangeColor(color);
 
                 // Paint the pixel (Twice to make sure it registers)
-                SendClick(pointPairs[x, y].Point, changeColor);
-                // SendClick(pointPairs[x, y].Point, false);
+                SendClick(pointPairs[x, y].Point, false);
+                SendClick(pointPairs[x, y].Point, false);
 
                 progress += stepIncrement;
                 PixelerForm.StaticUpdateOperation($"Painting progress: {progress:n0}%/100%");

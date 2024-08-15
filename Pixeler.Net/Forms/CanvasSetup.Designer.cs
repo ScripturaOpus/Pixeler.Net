@@ -54,6 +54,18 @@
             paintMethodSelection = new ComboBox();
             label7 = new Label();
             helpLink = new LinkLabel();
+            closeLocation = new Label();
+            openLocation = new Label();
+            label10 = new Label();
+            label11 = new Label();
+            label12 = new Label();
+            setColorEnter = new Controls.CurvedButton();
+            label13 = new Label();
+            setColorExit = new Controls.CurvedButton();
+            label14 = new Label();
+            setHexInput = new Controls.CurvedButton();
+            hexInputLocation = new Label();
+            label16 = new Label();
             ((System.ComponentModel.ISupportInitialize)speedMultiplier).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stepCount).BeginInit();
@@ -385,12 +397,157 @@
             helpLink.TabStop = true;
             helpLink.Text = "Help Page";
             // 
+            // closeLocation
+            // 
+            closeLocation.AutoSize = true;
+            closeLocation.Location = new Point(142, 366);
+            closeLocation.Name = "closeLocation";
+            closeLocation.Size = new Size(107, 15);
+            closeLocation.TabIndex = 34;
+            closeLocation.Text = "%PLACEHOLDER%";
+            // 
+            // openLocation
+            // 
+            openLocation.AutoSize = true;
+            openLocation.Location = new Point(142, 309);
+            openLocation.Name = "openLocation";
+            openLocation.Size = new Size(107, 15);
+            openLocation.TabIndex = 33;
+            openLocation.Text = "%PLACEHOLDER%";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(35, 366);
+            label10.Name = "label10";
+            label10.Size = new Size(85, 15);
+            label10.TabIndex = 32;
+            label10.Text = "Close Location";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(35, 309);
+            label11.Name = "label11";
+            label11.Size = new Size(85, 15);
+            label11.TabIndex = 31;
+            label11.Text = "Open Location";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(12, 285);
+            label12.Name = "label12";
+            label12.Size = new Size(114, 15);
+            label12.TabIndex = 30;
+            label12.Text = "Color Enter Override";
+            // 
+            // setColorEnter
+            // 
+            setColorEnter.BackColor = Color.SteelBlue;
+            setColorEnter.BackgroundColor = Color.SteelBlue;
+            setColorEnter.BorderColor = Color.PaleVioletRed;
+            setColorEnter.BorderRadius = 10;
+            setColorEnter.BorderSize = 0;
+            setColorEnter.FlatStyle = FlatStyle.Flat;
+            setColorEnter.ForeColor = Color.White;
+            setColorEnter.Location = new Point(140, 281);
+            setColorEnter.Name = "setColorEnter";
+            setColorEnter.Size = new Size(109, 23);
+            setColorEnter.TabIndex = 29;
+            setColorEnter.Text = "Set";
+            setColorEnter.TextColor = Color.White;
+            setColorEnter.UseVisualStyleBackColor = true;
+            setColorEnter.Click += setColorEnter_Click;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(12, 339);
+            label13.Name = "label13";
+            label13.Size = new Size(106, 15);
+            label13.TabIndex = 36;
+            label13.Text = "Color Exit Override";
+            // 
+            // setColorExit
+            // 
+            setColorExit.BackColor = Color.SteelBlue;
+            setColorExit.BackgroundColor = Color.SteelBlue;
+            setColorExit.BorderColor = Color.PaleVioletRed;
+            setColorExit.BorderRadius = 10;
+            setColorExit.BorderSize = 0;
+            setColorExit.FlatStyle = FlatStyle.Flat;
+            setColorExit.ForeColor = Color.White;
+            setColorExit.Location = new Point(140, 335);
+            setColorExit.Name = "setColorExit";
+            setColorExit.Size = new Size(109, 23);
+            setColorExit.TabIndex = 35;
+            setColorExit.Text = "Set";
+            setColorExit.TextColor = Color.White;
+            setColorExit.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(15, 398);
+            label14.Name = "label14";
+            label14.Size = new Size(107, 15);
+            label14.TabIndex = 40;
+            label14.Text = "Hex Input Override";
+            // 
+            // setHexInput
+            // 
+            setHexInput.BackColor = Color.SteelBlue;
+            setHexInput.BackgroundColor = Color.SteelBlue;
+            setHexInput.BorderColor = Color.PaleVioletRed;
+            setHexInput.BorderRadius = 10;
+            setHexInput.BorderSize = 0;
+            setHexInput.FlatStyle = FlatStyle.Flat;
+            setHexInput.ForeColor = Color.White;
+            setHexInput.Location = new Point(142, 394);
+            setHexInput.Name = "setHexInput";
+            setHexInput.Size = new Size(109, 23);
+            setHexInput.TabIndex = 39;
+            setHexInput.Text = "Set";
+            setHexInput.TextColor = Color.White;
+            setHexInput.UseVisualStyleBackColor = true;
+            // 
+            // hexInputLocation
+            // 
+            hexInputLocation.AutoSize = true;
+            hexInputLocation.Location = new Point(144, 425);
+            hexInputLocation.Name = "hexInputLocation";
+            hexInputLocation.Size = new Size(107, 15);
+            hexInputLocation.TabIndex = 38;
+            hexInputLocation.Text = "%PLACEHOLDER%";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(37, 425);
+            label16.Name = "label16";
+            label16.Size = new Size(84, 15);
+            label16.TabIndex = 37;
+            label16.Text = "Input Location";
+            // 
             // CanvasSetup
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(38, 38, 38);
-            ClientSize = new Size(510, 273);
+            ClientSize = new Size(510, 459);
+            Controls.Add(label14);
+            Controls.Add(setHexInput);
+            Controls.Add(hexInputLocation);
+            Controls.Add(label16);
+            Controls.Add(label13);
+            Controls.Add(setColorExit);
+            Controls.Add(closeLocation);
+            Controls.Add(openLocation);
+            Controls.Add(label10);
+            Controls.Add(label11);
+            Controls.Add(label12);
+            Controls.Add(setColorEnter);
             Controls.Add(helpLink);
             Controls.Add(paintMethodSelection);
             Controls.Add(label7);
@@ -452,5 +609,17 @@
         private ComboBox paintMethodSelection;
         private Label label7;
         private LinkLabel helpLink;
+        private Label closeLocation;
+        private Label openLocation;
+        private Label label10;
+        private Label label11;
+        private Label label12;
+        private Controls.CurvedButton setColorEnter;
+        private Label label13;
+        private Controls.CurvedButton setColorExit;
+        private Label label14;
+        private Controls.CurvedButton setHexInput;
+        private Label hexInputLocation;
+        private Label label16;
     }
 }

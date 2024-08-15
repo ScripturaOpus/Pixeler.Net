@@ -33,6 +33,15 @@ public class CanvasConfiguration
     [JsonProperty("canvas_bottom_right_point")]
     public Point CanvasBottomRight { get; set; }
 
+    [JsonProperty("open_color_menu_point")]
+    public Point? OpenColorMenu { get; set; }
+
+    [JsonProperty("close_color_menu_point")]
+    public Point? CloseColorMenu { get; set; }
+
+    [JsonProperty("hex_color_field_point")]
+    public Point? HexColorField { get; set; }
+
     /// <summary>
     /// The Windows path to the wanted image (Not preloaded for lower memory usage)
     /// </summary>
